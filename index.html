@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="description" content="Concept prototype for a design challenge: decide with dish videos, then go.">
+<title>Dish Proof · Concept Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=TikTok+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="stage"><div id="phone">
+
+  <!-- ============ 01 · For You ============ -->
+  <section class="screen on" id="feed">
+    <img class="cover" src="img/mala-full.jpg" alt="">
+    <div class="feed-top">
+      <span class="ic" data-i="live"></span>
+      <div class="feed-tabs"><span>Explore</span><span>Following</span><span class="active">For You</span></div>
+      <span class="ic" data-i="search"></span>
+    </div>
+    <div class="feed-bottom">
+      <div class="info">
+        <button class="anchor" data-act="openPlace"><span class="ic" data-i="anchor"></span><b>Good Harvest</b><span>· Atlanta</span></button>
+        <div class="user">spicyfoodie_atl</div>
+        <p class="caption">this dry pot in Doraville is unreal 🌶️ lotus root soaks up all the mala&nbsp; #atlantafood #sichuan</p>
+        <div class="sound"><span class="ic" data-i="music"></span>original sound - spicyfoodie_atl</div>
+      </div>
+      <div class="rail" data-avatar="img/a_spicy.jpg" data-counts="24.1K,812,3,204,1,206"></div>
+    </div>
+    <nav class="tabbar">
+      <div class="tab on"><span class="ic" data-i="home"></span>Home</div>
+      <div class="tab"><span class="ic" data-i="friends"></span>Friends</div>
+      <div class="tab create"><span class="ic" data-i="create"></span></div>
+      <div class="tab"><span class="ic" data-i="inbox"></span>Inbox</div>
+      <div class="tab"><span class="ic" data-i="profile"></span>Profile</div>
+    </nav>
+  </section>
+
+  <!-- ============ 02 / 04 / 5 · Place sheet ============ -->
+  <section class="screen" id="place">
+    <div class="mini-video"><img src="img/mala-full.jpg" alt=""><span class="credit">@spicyfoodie_atl · Oct 28</span></div>
+    <div class="mini-hit" data-act="closePlace"></div>
+
+    <div class="sticky-header">
+      <div class="navrow">
+        <button class="circ" data-act="collapse"><span class="ic" data-i="back"></span></button>
+        <div class="navright">
+          <button class="circ"><span class="ic" data-i="bookmark"></span></button>
+          <button class="circ"><span class="ic" data-i="share"></span></button>
+          <button class="circ"><span class="ic" data-i="more"></span></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sheet" id="sheet">
+      <div class="tabs" id="tabs">
+        <button class="on" data-sec="overview">Overview</button>
+        <button data-sec="dishes">Dishes</button>
+        <button data-sec="videos">Videos</button>
+        <button data-sec="reviews">Reviews</button>
+      </div>
+      <div class="sheet-scroll" id="sheetScroll">
+        <div class="grabber"><i></i></div>
+
+        <section class="sec" id="sec-overview">
+          <div class="place-head">
+            <img class="avatar28" src="img/store.jpg" alt="">
+            <div class="name"><b>Good Harvest</b><span>Sichuan · Doraville</span></div>
+            <div class="head-actions"><span class="ic dark" data-i="share"></span><span class="ic dark" data-i="bookmark"></span><span class="ic dark" data-i="more"></span></div>
+          </div>
+          <div class="rating"><span class="ic" data-i="star"></span><b>4.6</b> Excellent (18)</div>
+          <div class="status"><span class="open">Open</span><span class="rest">&nbsp;· 12:00 PM – 11:00 PM · $20-50 · Chinese Restaurant</span><span class="ic sm" data-i="chev"></span></div>
+          <div class="getting"><span class="ic pin" data-i="pin"></span><span>Open until 11 PM</span><i></i><span>18 min drive</span><i></i><span>from $20 ride</span><span class="ic sm" data-i="chev"></span></div>
+          <div class="pills">
+            <button><span class="ic" data-i="website"></span>Website</button>
+            <button><span class="ic" data-i="map"></span>Map</button>
+            <button><span class="ic" data-i="call"></span>Call</button>
+            <button><span class="ic" data-i="review"></span>Review</button>
+          </div>
+        </section>
+
+        <section class="sec" id="sec-dishes">
+          <div class="sec-head"><h3>Signature dishes<em> · 4</em></h3><a class="all"><span class="half-only">View all</span><span class="full-only">All</span><span class="ic xs" data-i="chev"></span></a></div>
+          <div class="dish-row" id="dishRow"></div>
+        </section>
+
+        <section class="sec full-only" id="sec-videos">
+          <div class="sec-head"><h3>Recent videos<em> · 98</em></h3><a class="all">All<span class="ic xs" data-i="chev"></span></a></div>
+          <div class="vgrid" id="vgrid"></div>
+        </section>
+
+        <section class="sec" id="sec-reviews">
+          <div class="sec-head"><h3><span class="half-only">What people say</span><span class="full-only">Reviews<em> · 18</em></span></h3><a class="all"><span class="half-only">View all</span><span class="full-only">All</span><span class="ic xs" data-i="chev"></span></a></div>
+          <div class="reviews" id="reviews"></div>
+          <a class="view-all-bottom">View all<span class="ic xs" data-i="chev"></span></a>
+        </section>
+      </div>
+    </div>
+
+    <div class="action-bar light">
+      <button class="btn2" data-act="ride"><b>Get a ride</b><span class="rsub">from $20 · Uber / Lyft</span></button>
+      <button class="btn1" data-act="dir"><b>Guide me there</b><span class="gsub">18 min drive</span></button>
+    </div>
+  </section>
+
+  <!-- ============ 03 · Dish feed ============ -->
+  <section class="screen" id="dishfeed">
+    <div class="df-scroll" id="dfScroll"></div>
+    <div class="df-top">
+      <button class="circ" data-act="dfBack"><span class="ic" data-i="back"></span></button>
+      <div class="df-title"><b id="dfDish">Spicy Frog</b><span id="dfIdx">1 / 18 · Good Harvest</span></div>
+      <i class="spacer"></i>
+    </div>
+    <div class="place-bar">
+      <div class="pb-place">
+        <img src="img/store.jpg" alt="">
+        <div><b>Good Harvest</b><div class="pb-meta"><span class="ic s16" data-i="star"></span><strong>4.6</strong><span>· Spicy Frog · 18 recent videos</span></div></div>
+      </div>
+      <div class="pb-buttons">
+        <button class="btn2 dark" data-act="ride"><b>Get a ride</b><span class="rsub">from $20 · Uber / Lyft</span></button>
+        <button class="btn1" data-act="dir"><b>Guide me there</b><span class="gsub">18 min drive</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Hand-off sheets ============ -->
+  <div id="dim" data-act="closeSheet"></div>
+
+  <div class="psheet" id="sheetDir">
+    <div class="grabber"><i></i></div>
+    <div class="ps-head"><i class="spacer"></i><h4>Get directions</h4><button data-act="closeSheet"><span class="ic" data-i="close"></span></button></div>
+    <p class="ps-sub">Good Harvest · Doraville, GA</p>
+    <div class="app-list">
+      <button class="app-row" data-pick="Google Maps"><img src="img/logo_gmaps.jpg" alt=""><div><b>Google Maps</b><span>18 min · 9.8 mi</span></div><span class="ic s16" data-i="chev"></span></button>
+      <button class="app-row" data-pick="Apple Maps"><img src="img/logo_amaps.jpg" alt=""><div><b>Apple Maps</b><span>18 min · 9.8 mi</span></div><span class="ic s16" data-i="chev"></span></button>
+      <button class="app-row" data-pick="Waze"><img src="img/logo_waze.jpg" alt=""><div><b>Waze</b><span>17 min · 9.8 mi</span></div><span class="ic s16" data-i="chev"></span></button>
+    </div>
+    <button class="remember" data-act="toggleRemember"><span class="box"><span class="ic" data-i="check"></span></span>Remember my choice</button>
+  </div>
+
+  <div class="psheet" id="sheetRide">
+    <div class="grabber"><i></i></div>
+    <div class="ps-head"><i class="spacer"></i><h4>Ride to Good Harvest</h4><button data-act="closeSheet"><span class="ic" data-i="close"></span></button></div>
+    <div class="route"><i class="dot"></i><span>Current location</span><span class="ic s16" data-i="arrow"></span><b>Good Harvest</b></div>
+    <div class="app-list">
+      <button class="app-row" data-pick="Lyft"><img src="img/logo_lyft.jpg" alt=""><div><b>Lyft <em class="tag">Lowest</em></b><span>Standard · 6 min away</span></div><strong>$20</strong><span class="ic s16" data-i="chev"></span></button>
+      <button class="app-row" data-pick="Uber"><img src="img/logo_uber.jpg" alt=""><div><b>Uber</b><span>UberX · 4 min away</span></div><strong>$22</strong><span class="ic s16" data-i="chev"></span></button>
+    </div>
+    <p class="ps-note">Estimated fare. You'll confirm and pay in the app.</p>
+    <button class="remember" data-act="toggleRemember"><span class="box"><span class="ic" data-i="check"></span></span>Remember my choice</button>
+  </div>
+
+  <div id="toast"><span class="spin"></span><span id="toastText">Opening…</span></div>
+  <div id="hint"></div>
+
+  <!-- shared chrome -->
+  <div class="statusbar" id="statusbar"><span class="time">9:41</span><span class="sb-right"><span class="ic" data-i="signal"></span><span class="ic" data-i="wifi"></span><span class="ic" data-i="battery"></span></span></div>
+  <div class="home-ind" id="homeInd"></div>
+
+  <div class="overlay" id="end">
+    <h2 id="endTitle">Handing off</h2>
+    <p id="endBody"></p>
+    <button class="obtn primary" data-act="restart">Start over</button>
+    <button class="obtn ghost" data-act="again">Back to the place</button>
+    <div class="fine">Concept prototype for a design challenge. Not an official TikTok product. Prices and times are illustrative.</div>
+  </div>
+  <div class="overlay on" id="intro">
+    <h2>You just saw this video.</h2>
+    <p>Decide whether this restaurant is worth going to tonight. If it is, get yourself on the way.</p>
+    <p>Think out loud as you go.</p>
+    <button class="obtn primary" data-act="start">Start</button>
+    <div class="fine">Concept prototype for a design challenge. Not an official TikTok product.</div>
+  </div>
+
+</div></div>
+<script src="app.js"></script>
+</body>
+</html>
