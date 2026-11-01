@@ -94,7 +94,7 @@
 
   const rail = (av, c) => `
     <div class="creator"><img src="${av}" alt=""><span class="follow">${ICON.plus}</span></div>
-    <div class="act">${ICON.like}${c[0]}</div>
+    <div class="act like">${ICON.like}<span class="cnt">${c[0]}</span></div>
     <div class="act">${ICON.comment}${c[1]}</div>
     <div class="act">${ICON.fav}${c[2]}</div>
     <div class="act">${ICON.share2}${c[3]}</div>
@@ -149,191 +149,405 @@
 
   paintIcons(document);
 
-  /* ---------------- phone scaling ---------------- */
+  /* ======================================================================
+     Interaction + motion layer
+     ====================================================================== */
   const phone = $('#phone');
+  const IOS = 'cubic-bezier(.32,.72,0,1)';          // iOS sheet curve
+  const OUT = 'cubic-bezier(.2,.8,.2,1)';
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const D = ms => reduce ? 1 : ms;
+
   const fit = () => {
-    const pad = window.innerWidth >= 600 ? 0.92 : 1;
+    const pad = window.innerWidth >= 600 ? 0.9 : 1;
     const s = Math.min(window.innerWidth / 390, window.innerHeight / 844) * pad;
     phone.style.transform = `scale(${s})`;
   };
   window.addEventListener('resize', fit); fit();
   const scale = () => phone.getBoundingClientRect().height / 844;
+  const local = el => { const p = phone.getBoundingClientRect(), r = el.getBoundingClientRect(), k = scale();
+    return { x: (r.left - p.left) / k, y: (r.top - p.top) / k, w: r.width / k, h: r.height / k }; };
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  const anim = (el, frames, opts) => el.animate(frames, Object.assign({ fill: 'forwards' }, opts, { duration: D(opts.duration) })).finished;
 
   /* ---------------- state ---------------- */
-  const S = { screen: 'feed', mode: 'half', remember: true, choice: { dir: null, ride: null }, sheet: null, from: 'place' };
-  const place = $('#place'), sheet = $('#sheet'), scroller = $('#sheetScroll');
+  const S = { screen: 'feed', mode: 'half', remember: true, choice: { dir: null, ride: null }, sheet: null, from: 'place', busy: false };
+  const place = $('#place'), sheet = $('#sheet'), scroller = $('#sheetScroll'), morph = $('#morph');
+  const HALF = 228, FULL = 100;
 
   function show(id) {
     $$('.screen').forEach(s => s.classList.toggle('on', s.id === id));
     S.screen = id;
-    $('#homeInd').classList.toggle('dark', id === 'place' || !!S.sheet);
+    syncChrome();
   }
-  function setMode(m) {
-    S.mode = m;
-    place.classList.toggle('full', m === 'full');
-    sheet.style.top = '';
-    scroller.scrollTop = 0;
-    setTab('overview');
-  }
-  function openPlace() {
-    setMode('half');
-    show('place');
-    sheet.classList.add('dragging'); sheet.style.top = '844px';
-    requestAnimationFrame(() => requestAnimationFrame(() => { sheet.classList.remove('dragging'); sheet.style.top = ''; }));
-  }
-  function closePlace() {
-    sheet.style.top = '844px';
-    setTimeout(() => { show('feed'); sheet.style.top = ''; }, 300);
+  function syncChrome() {
+    const lightBg = (S.screen === 'place') || !!S.sheet;
+    $('#homeInd').classList.toggle('dark', lightBg);
   }
 
-  /* sheet drag (half mode) + pull-down (full mode at top) */
+  /* ---------- sheet position (single source of truth) ---------- */
+  let sheetY = 844;
+  function setSheet(y, ms, ease) {
+    sheetY = y;
+    sheet.style.transition = ms ? `transform ${D(ms)}ms ${ease || IOS}` : 'none';
+    sheet.style.transform = `translateY(${y - FULL}px)`;
+    // progress 0 (half) → 1 (full) drives the cross-fade of header/mini video
+    const p = Math.max(0, Math.min(1, (HALF - y) / (HALF - FULL)));
+    place.style.setProperty('--p', p.toFixed(3));
+    place.style.setProperty('--pt', ms ? `${D(ms)}ms` : '0ms');
+  }
+  function setMode(m, ms = 460) {
+    S.mode = m;
+    place.classList.toggle('full', m === 'full');
+    if (m === 'half') { scroller.scrollTop = 0; setTab('overview', true); }
+    setSheet(m === 'full' ? FULL : HALF, ms);
+  }
+
+  /* ---------- 01 → 02: video shrinks into the top, sheet rises ---------- */
+  async function openPlace() {
+    if (S.busy) return; S.busy = true;
+    setMode('half', 0); setSheet(844, 0);
+    place.classList.add('on', 'entering');           // keep feed visible underneath
+    S.screen = 'place'; syncChrome();
+    const img = morph.querySelector('img'); img.src = $('#feed .cover').src;
+    Object.assign(morph.style, { display: 'block', left: '0px', top: '0px', width: '390px', height: '844px', borderRadius: '0px' });
+    $('#feed .feed-ui').animate([{ opacity: 1 }, { opacity: 0 }], { duration: D(180), fill: 'forwards' });
+    requestAnimationFrame(() => setSheet(HALF, 520));
+    await anim(morph, [{ left: '0px', top: '0px', width: '390px', height: '844px' }, { left: '122px', top: '0px', width: '147px', height: '228px' }], { duration: 520, easing: IOS });
+    place.classList.remove('entering');
+    morph.style.display = 'none'; morph.getAnimations().forEach(a => a.cancel());
+    $('#feed').classList.remove('on'); $('#feed .feed-ui').getAnimations().forEach(a => a.cancel());
+    S.busy = false;
+  }
+  async function closePlace() {
+    if (S.busy) return; S.busy = true;
+    if (S.mode === 'full') { setMode('half', 300); await wait(D(300)); }
+    $('#feed').classList.add('on');
+    place.classList.add('entering');
+    const img = morph.querySelector('img'); img.src = $('#feed .cover').src;
+    Object.assign(morph.style, { display: 'block', left: '122px', top: '0px', width: '147px', height: '228px' });
+    setSheet(844, 420);
+    const ui = $('#feed .feed-ui'); ui.style.opacity = 0;
+    await anim(morph, [{ left: '122px', top: '0px', width: '147px', height: '228px' }, { left: '0px', top: '0px', width: '390px', height: '844px' }], { duration: 440, easing: IOS });
+    ui.animate([{ opacity: 0 }, { opacity: 1 }], { duration: D(200) }); ui.style.opacity = '';
+    morph.style.display = 'none'; morph.getAnimations().forEach(a => a.cancel());
+    place.classList.remove('on', 'entering'); S.screen = 'feed'; syncChrome();
+    S.busy = false;
+  }
+
+  /* ---------- sheet drag with velocity + rubber band ---------- */
   let drag = null;
+  const track = (d, y) => { const t = performance.now(); d.pts.push([t, y]); while (d.pts.length > 5) d.pts.shift(); };
+  const velocity = d => { const a = d.pts[0], b = d.pts[d.pts.length - 1]; return b && a && b[0] !== a[0] ? (b[1] - a[1]) / (b[0] - a[0]) : 0; };
+  const rubber = (y) => y < FULL ? FULL - (FULL - y) * 0.25 : y;
+
   sheet.addEventListener('pointerdown', e => {
-    drag = { x: e.clientX, y: e.clientY, t0: sheet.getBoundingClientRect().top, startTop: scroller.scrollTop, moved: false };
+    if (e.pointerType !== 'mouse' && S.mode === 'full') return;        // touch in full mode → native scroll (see touch handler)
+    drag = { x: e.clientX, y: e.clientY, base: sheetY, startTop: scroller.scrollTop, moved: false, pts: [] };
   });
   window.addEventListener('pointermove', e => {
     if (!drag) return;
-    const dy = (e.clientY - drag.y) / scale(), dx = (e.clientX - drag.x) / scale();
+    const k = scale(), dy = (e.clientY - drag.y) / k, dx = (e.clientX - drag.x) / k;
     if (!drag.moved && Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) { drag = null; return; }
-    if (Math.abs(dy) > 6) drag.moved = true;
-    if (S.mode === 'half' && drag.moved) {
-      sheet.classList.add('dragging');
-      sheet.style.top = Math.max(100, Math.min(844, 228 + dy)) + 'px';
-    }
+    if (!drag.moved && Math.abs(dy) < 6) return;
+    if (S.mode === 'full' && !(drag.startTop <= 0 && dy > 0)) { drag = null; return; } // let content scroll
+    drag.moved = true; track(drag, e.clientY / k);
+    setSheet(rubber(drag.base + dy), 0);
   });
-  window.addEventListener('pointerup', e => {
+  window.addEventListener('pointerup', () => {
     if (!drag) return;
-    const dy = (e.clientY - drag.y) / scale(), d = drag; drag = null;
-    sheet.classList.remove('dragging');
-    if (!d.moved) { sheet.style.top = ''; return; }
-    suppressClick();
-    if (S.mode === 'half') {
-      if (dy < -50) { sheet.style.top = ''; setMode('full'); }
-      else if (dy > 90) closePlace();
-      else sheet.style.top = '';
-    } else if (d.startTop <= 0 && scroller.scrollTop <= 0 && dy > 70) {
-      setMode('half');
-    }
+    const d = drag; drag = null;
+    if (!d.moved) return;
+    suppressClick(); settle(velocity(d));
   });
-  window.addEventListener('pointercancel', () => { if (drag && S.mode==='half') sheet.style.top=''; drag = null; sheet.classList.remove('dragging'); });
-  // wheel / trackpad: expand in half mode, collapse when pulled at top in full mode
-  let wheelLock = 0;
+  window.addEventListener('pointercancel', () => { if (drag && drag.moved) settle(0); drag = null; });
+
+  function settle(v) {                                  // v in px/ms (positive = downward)
+    const y = sheetY;
+    if (S.mode === 'half') {
+      if (v < -0.45 || y < HALF - 70) return setMode('full', 420);
+      if (v > 0.6 || y > HALF + 110) return closePlace();
+      return setSheet(HALF, 380);
+    }
+    if (v > 0.5 || y > FULL + 90) return setMode('half', 420);
+    setSheet(FULL, 360);
+  }
+
+  // touch: pulling down at the top of the full sheet drags the sheet instead of over-scrolling
+  let tdrag = null;
+  scroller.addEventListener('touchstart', e => { if (S.mode === 'full') tdrag = { y: e.touches[0].clientY, active: false, pts: [] }; }, { passive: true });
+  scroller.addEventListener('touchmove', e => {
+    if (!tdrag) return;
+    const k = scale(), dy = (e.touches[0].clientY - tdrag.y) / k;
+    if (!tdrag.active && scroller.scrollTop <= 0 && dy > 6) tdrag.active = true;
+    if (tdrag.active) { e.preventDefault(); track(tdrag, e.touches[0].clientY / k); setSheet(FULL + Math.max(0, dy), 0); }
+  }, { passive: false });
+  scroller.addEventListener('touchend', () => { if (tdrag && tdrag.active) settle(velocity(tdrag)); tdrag = null; });
+
+  // wheel / trackpad
+  let wheelLock = 0, wheelAcc = 0;
   sheet.addEventListener('wheel', e => {
-    if (Date.now() < wheelLock) return;
-    if (S.mode === 'half' && e.deltaY > 12) { wheelLock = Date.now() + 500; setMode('full'); }
-    else if (S.mode === 'half' && e.deltaY < -12) { wheelLock = Date.now() + 500; closePlace(); }
-    else if (S.mode === 'full' && scroller.scrollTop <= 0 && e.deltaY < -30) { wheelLock = Date.now() + 500; setMode('half'); }
+    if (Date.now() < wheelLock || S.busy) return;
+    if (S.mode === 'half') {
+      wheelAcc += e.deltaY;
+      if (wheelAcc > 30) { wheelLock = Date.now() + 600; wheelAcc = 0; setMode('full', 460); }
+      else if (wheelAcc < -40) { wheelLock = Date.now() + 600; wheelAcc = 0; closePlace(); }
+    } else if (scroller.scrollTop <= 0 && e.deltaY < -40) { wheelLock = Date.now() + 600; setMode('half', 460); }
   }, { passive: true });
 
-  /* tabs + scrollspy */
-  function setTab(sec) { $$('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.sec === sec)); }
+  /* ---------- tabs: sliding ink + scrollspy ---------- */
+  const ink = $('#tabInk');
+  function setTab(sec, instant) {
+    let on;
+    $$('#tabs button').forEach(b => { const a = b.dataset.sec === sec; b.classList.toggle('on', a); if (a) on = b; });
+    if (!on) return;
+    ink.style.transition = instant ? 'none' : `transform ${D(320)}ms ${IOS}`;
+    ink.style.transform = `translateX(${on.offsetLeft + on.offsetWidth / 2 - 13}px)`;
+  }
+  let spyLock = 0;
   $('#tabs').addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b) return;
     const target = $('#sec-' + b.dataset.sec);
-    scroller.scrollTo({ top: b.dataset.sec === 'overview' ? 0 : target.offsetTop - 4, behavior: 'smooth' });
+    spyLock = Date.now() + 700;
+    scroller.scrollTo({ top: b.dataset.sec === 'overview' ? 0 : target.offsetTop - 4, behavior: reduce ? 'auto' : 'smooth' });
     setTab(b.dataset.sec);
   });
   scroller.addEventListener('scroll', () => {
-    if (S.mode !== 'full') return;
+    if (S.mode !== 'full' || Date.now() < spyLock) return;
     const y = scroller.scrollTop + 60;
     let cur = 'overview';
     ['dishes', 'videos', 'reviews'].forEach(s => { if ($('#sec-' + s).offsetTop <= y) cur = s; });
     if (scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 4) cur = 'reviews';
-    setTab(cur);
-  });
+    if (!$('#tabs button.on') || $('#tabs button.on').dataset.sec !== cur) setTab(cur);
+  }, { passive: true });
 
-  /* dish feed */
-  const df = $('#dfScroll');
-  function openFeed(i) {
-    S.from = S.screen;
-    show('dishfeed');
-    df.scrollTop = (i || 0) * 696;
-    updateFeedTitle();
-    const f = $('#dishfeed'); f.classList.remove('peek'); void f.offsetWidth; if (!i) f.classList.add('peek');
+  /* ---------- dish → feed: thumbnail expands into the video ---------- */
+  const df = $('#dfScroll'), dfEl = $('#dishfeed');
+  let feedSource = null;
+  async function openFeed(fromEl) {
+    if (S.busy) return; S.busy = true;
+    S.from = S.screen; feedSource = fromEl || null;
+    df.scrollTop = 0; updateFeedTitle(true);
+    const r = fromEl ? local(fromEl) : { x: 0, y: 0, w: 390, h: 772 };
+    const img = morph.querySelector('img'); img.src = FEED[0].img;
+    Object.assign(morph.style, { display: 'block', left: r.x + 'px', top: r.y + 'px', width: r.w + 'px', height: r.h + 'px', borderRadius: '10px' });
+    dfEl.classList.add('on', 'entering');
+    await anim(morph, [{ left: r.x + 'px', top: r.y + 'px', width: r.w + 'px', height: r.h + 'px', borderRadius: '10px' },
+                       { left: '0px', top: '0px', width: '390px', height: '772px', borderRadius: '0px' }], { duration: 480, easing: IOS });
+    S.screen = 'dishfeed'; place.classList.remove('on'); syncChrome();
+    dfEl.classList.remove('entering');
+    morph.style.display = 'none'; morph.getAnimations().forEach(a => a.cancel());
+    startPlayback();
+    dfEl.classList.remove('peek'); void dfEl.offsetWidth; dfEl.classList.add('peek');
+    S.busy = false;
   }
-  function updateFeedTitle() {
+  async function closeFeed() {
+    if (S.busy) return; S.busy = true;
+    const back = S.from === 'dishfeed' ? 'place' : S.from;
     const i = Math.round(df.scrollTop / 696);
-    $('#dfIdx').textContent = (i + 1) + ' / 18 · Good Harvest';
+    place.classList.add('on'); S.screen = back; syncChrome();
+    if (feedSource && feedSource.isConnected) {
+      const r = local(feedSource);
+      const img = morph.querySelector('img'); img.src = FEED[i].img;
+      Object.assign(morph.style, { display: 'block', left: '0px', top: '0px', width: '390px', height: '772px', borderRadius: '0px' });
+      dfEl.classList.add('leaving');
+      await anim(morph, [{ left: '0px', top: '0px', width: '390px', height: '772px', borderRadius: '0px', opacity: 1 },
+                         { left: r.x + 'px', top: r.y + 'px', width: r.w + 'px', height: r.h + 'px', borderRadius: '10px', opacity: 1 }], { duration: 420, easing: IOS });
+      morph.style.display = 'none'; morph.getAnimations().forEach(a => a.cancel());
+    }
+    dfEl.classList.remove('on', 'leaving', 'peek');
+    S.busy = false;
   }
-  df.addEventListener('scroll', updateFeedTitle, { passive: true });
-  // mouse drag support for desktop testers
+  function updateFeedTitle(instant) {
+    const i = Math.round(df.scrollTop / 696), el = $('#dfIdx'), txt = (i + 1) + ' / 18 · Good Harvest';
+    if (el.textContent === txt) return;
+    if (instant || reduce) { el.textContent = txt; return; }
+    el.animate([{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(-4px)' }], { duration: 120 }).finished
+      .then(() => { el.textContent = txt; el.animate([{ opacity: 0, transform: 'translateY(4px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 160 }); });
+  }
+  let lastIdx = 0;
+  df.addEventListener('scroll', () => {
+    updateFeedTitle();
+    const i = Math.round(df.scrollTop / 696);
+    if (i !== lastIdx && Math.abs(df.scrollTop - i * 696) < 4) { lastIdx = i; startPlayback(); }
+  }, { passive: true });
+  // mouse drag → page by page
   let fdrag = null;
   df.addEventListener('pointerdown', e => { if (e.pointerType === 'mouse') fdrag = { y: e.clientY, top: df.scrollTop }; });
   window.addEventListener('pointerup', e => {
     if (!fdrag) return;
-    const dy = (e.clientY - fdrag.y) / scale(); const start = fdrag.top; fdrag = null;
+    const dy = (e.clientY - fdrag.y) / scale(), start = fdrag.top; fdrag = null;
     if (Math.abs(dy) > 40) { const i = Math.round(start / 696) + (dy < 0 ? 1 : -1); df.scrollTo({ top: Math.max(0, Math.min(2, i)) * 696, behavior: 'smooth' }); suppressClick(); }
   });
 
-  /* hand-off */
+  /* ---------- "video" playback: slow push-in + progress ---------- */
+  function startPlayback() {
+    const i = Math.round(df.scrollTop / 696);
+    $$('.df-item').forEach((it, k) => {
+      const bar = it.querySelector('.track i'), im = it.querySelector(':scope > img');
+      bar.getAnimations().forEach(a => a.cancel()); im.getAnimations().forEach(a => a.cancel());
+      if (k !== i || reduce) return;
+      const from = FEED[k].played;
+      bar.animate([{ width: from + 'px' }, { width: '364px' }], { duration: 9000, easing: 'linear', fill: 'forwards' });
+      im.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.07)' }], { duration: 12000, easing: 'ease-out', fill: 'forwards' });
+    });
+  }
+
+  /* ---------- likes: tap + double-tap heart burst ---------- */
+  function burst(host, x, y) {
+    const h = document.createElement('div'); h.className = 'burst';
+    h.innerHTML = '<svg viewBox="0 0 34 34" width="96" height="96"><path d="M18.58 29.17C18.58 29.17 9.5 22.01 5.96 15.35C3.69 10.68 6.39 5.15 11.63 5.15C14.6 5.15 16.44 6.71 17.29 8.13C18.14 6.71 19.99 5.15 22.96 5.15C28.2 5.15 30.89 10.68 28.63 15.35C22.96 24.02 18.58 29.17 18.58 29.17Z" fill="#FE2C55"/></svg>';
+    const rot = (Math.random() * 30 - 15).toFixed(0);
+    h.style.left = (x - 48) + 'px'; h.style.top = (y - 60) + 'px';
+    phone.appendChild(h);
+    h.animate([
+      { transform: `rotate(${rot}deg) scale(.2)`, opacity: 0 },
+      { transform: `rotate(${rot}deg) scale(1.15)`, opacity: 1, offset: .25 },
+      { transform: `rotate(${rot}deg) scale(.95)`, opacity: 1, offset: .4 },
+      { transform: `rotate(${rot}deg) scale(1)`, opacity: 1, offset: .7 },
+      { transform: `rotate(${rot}deg) translateY(-80px) scale(1.4)`, opacity: 0 }
+    ], { duration: D(900), easing: 'ease-out' }).finished.then(() => h.remove());
+    const like = host.querySelector('.act.like'); if (like) setLiked(like, true);
+  }
+  function setLiked(el, on) {
+    if (el.classList.contains('liked') === on) return;
+    el.classList.toggle('liked', on);
+    const n = el.querySelector('.cnt'); const base = el.dataset.base || n.textContent; el.dataset.base = base;
+    n.textContent = on ? bump(base) : base;
+    el.querySelector('svg').animate([{ transform: 'scale(1)' }, { transform: 'scale(1.3)' }, { transform: 'scale(.92)' }, { transform: 'scale(1)' }], { duration: D(380), easing: OUT });
+  }
+  const bump = s => /K$/.test(s) ? s : (parseInt(s.replace(/,/g, ''), 10) + 1).toLocaleString('en-US');
+  let lastTap = { t: 0, x: 0, y: 0 };
+  function videoTap(e, host) {
+    if (e.target.closest('button,.act,.anchor,.rail,.place-bar,.df-top,.tabbar,.feed-top')) return false;
+    const now = performance.now(), p = local({ getBoundingClientRect: () => ({ left: e.clientX, top: e.clientY, width: 0, height: 0 }) });
+    if (now - lastTap.t < 320 && Math.hypot(p.x - lastTap.x, p.y - lastTap.y) < 40) { burst(host, p.x, p.y); lastTap.t = 0; return true; }
+    lastTap = { t: now, x: p.x, y: p.y }; return false;
+  }
+
+  /* ---------- hand-off ---------- */
   function paintRemembered() {
     const d = S.choice.dir, r = S.choice.ride;
     $$('.gsub').forEach(e => e.textContent = d ? '18 min drive · ' + d : '18 min drive');
     $$('.rsub').forEach(e => e.textContent = r ? (r === 'Lyft' ? '$20 · Lyft' : '$22 · Uber') : 'from $20 · Uber / Lyft');
   }
-  function openSheet(kind) {
-    if (S.choice[kind]) { handoff(kind, S.choice[kind]); return; }
+  function openSheet(kind, btn) {
+    if (S.busy) return;
+    if (S.choice[kind]) { launch(kind, S.choice[kind], btn); return; }
     S.sheet = kind;
     const el = $(kind === 'dir' ? '#sheetDir' : '#sheetRide');
     el.classList.toggle('unchecked', !S.remember);
     $('#dim').classList.add('on'); el.classList.add('on');
-    $('#homeInd').classList.add('dark');
+    if (!reduce) $$('.app-row, .route, .ps-sub, .ps-note, .remember', el).forEach((r, i) =>
+      r.animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }], { duration: 360, delay: 90 + i * 45, easing: OUT, fill: 'backwards' }));
+    syncChrome();
   }
-  function closeSheet(cb) {
-    if (!S.sheet) { cb && cb(); return; }
+  function closeSheet() {
+    if (!S.sheet) return Promise.resolve();
     $('#dim').classList.remove('on'); $$('.psheet').forEach(p => p.classList.remove('on'));
-    S.sheet = null;
-    $('#homeInd').classList.toggle('dark', S.screen === 'place');
-    setTimeout(() => cb && cb(), 260);
+    S.sheet = null; syncChrome();
+    return wait(D(240));
   }
-  function handoff(kind, app) {
-    $('#toastText').textContent = 'Opening ' + app + '…';
-    $('#toast').classList.add('on');
-    setTimeout(() => {
-      $('#toast').classList.remove('on');
-      $('#endTitle').textContent = 'Handing off to ' + app;
-      $('#endBody').textContent = kind === 'dir'
-        ? app + ' opens with Good Harvest already set as the destination. About 18 min by car.'
-        : app + ' opens with pickup at your location and Good Harvest as the drop-off. You confirm and pay in ' + app + '.';
-      $('#end').classList.add('on');
-    }, 1400);
+  const BRAND = { 'Google Maps': '#FFFFFF', 'Apple Maps': '#FFFFFF', 'Waze': '#33CCFF', 'Lyft': '#FF00BF', 'Uber': '#000000' };
+  const LOGO = { 'Google Maps': 'img/logo_gmaps.jpg', 'Apple Maps': 'img/logo_amaps.jpg', 'Waze': 'img/logo_waze.jpg', 'Lyft': 'img/logo_lyft.jpg', 'Uber': 'img/logo_uber.jpg' };
+  async function launch(kind, app, fromEl) {
+    if (S.busy) return; S.busy = true;
+    const L = $('#launch'), logo = L.querySelector('img');
+    const r = fromEl ? local(fromEl) : { x: 173, y: 400, w: 44, h: 44 };
+    logo.src = LOGO[app];
+    L.style.background = BRAND[app];
+    L.classList.toggle('dark', BRAND[app] !== '#FFFFFF');
+    $('#launchText').textContent = 'Opening ' + app;
+    Object.assign(L.style, { display: 'flex', left: r.x + 'px', top: r.y + 'px', width: r.w + 'px', height: r.h + 'px', borderRadius: Math.min(r.h / 2, 24) + 'px' });
+    L.dataset.from = JSON.stringify(r);
+    logo.animate([{ opacity: 0, transform: 'scale(.6)' }, { opacity: 1, transform: 'scale(1)' }], { duration: D(380), delay: D(120), easing: OUT, fill: 'both' });
+    await anim(L, [{ left: r.x + 'px', top: r.y + 'px', width: r.w + 'px', height: r.h + 'px', borderRadius: Math.min(r.h / 2, 24) + 'px' },
+                   { left: '0px', top: '0px', width: '390px', height: '844px', borderRadius: '48px', offset: .85 },
+                   { left: '0px', top: '0px', width: '390px', height: '844px', borderRadius: '0px' }], { duration: 520, easing: IOS });
+    await wait(D(650));
+    const end = $('#end');
+    $('#endTitle').textContent = kind === 'dir' ? 'Good Harvest is set as your destination' : 'Pickup and drop-off are filled in';
+    $('#endBody').textContent = kind === 'dir'
+      ? app + ' opens with directions ready. About 18 min by car.'
+      : app + ' opens with your location as pickup and Good Harvest as drop-off. You confirm and pay in ' + app + '.';
+    $('#endNote').textContent = S.choice[kind] ? 'Next time, this button goes straight to ' + app + '.' : '';
+    end.classList.add('on');
+    S.busy = false;
   }
-  function hint(t) {
-    const h = $('#hint'); h.textContent = t; h.classList.add('on');
-    clearTimeout(hint.t); hint.t = setTimeout(() => h.classList.remove('on'), 1400);
+  async function unlaunch() {
+    const L = $('#launch'), r = JSON.parse(L.dataset.from || '{"x":173,"y":400,"w":44,"h":44}');
+    $('#end').classList.remove('on');
+    L.querySelector('img').animate([{ opacity: 1 }, { opacity: 0 }], { duration: D(150), fill: 'forwards' });
+    await anim(L, [{ left: '0px', top: '0px', width: '390px', height: '844px', borderRadius: '0px', opacity: 1 },
+                   { left: r.x + 'px', top: r.y + 'px', width: r.w + 'px', height: r.h + 'px', borderRadius: '24px', opacity: 0 }], { duration: 420, easing: IOS });
+    L.style.display = 'none'; L.getAnimations().forEach(a => a.cancel()); L.querySelector('img').getAnimations().forEach(a => a.cancel());
+    paintRemembered();
   }
 
-  /* click routing */
+  function hint(t) {
+    const h = $('#hint'); h.textContent = t; h.classList.remove('on'); void h.offsetWidth; h.classList.add('on');
+    clearTimeout(hint.t); hint.t = setTimeout(() => h.classList.remove('on'), 1600);
+  }
+
+  /* ---------- click routing ---------- */
   let blockClick = false;
-  function suppressClick() { blockClick = true; setTimeout(() => blockClick = false, 60); }
+  function suppressClick() { blockClick = true; setTimeout(() => blockClick = false, 80); }
   const ACT = {
-    start() { $('#intro').classList.remove('on'); show('feed'); },
+    async start() {
+      const intro = $('#intro');
+      await anim(intro, [{ opacity: 1 }, { opacity: 0 }], { duration: 260, easing: 'ease' });
+      intro.classList.remove('on'); intro.getAnimations().forEach(a => a.cancel());
+    },
     openPlace, closePlace,
     collapse() { setMode('half'); },
-    dfBack() { show(S.from === 'dishfeed' ? 'place' : S.from); },
-    dir() { openSheet('dir'); },
-    ride() { openSheet('ride'); },
-    closeSheet() { closeSheet(); },
-    toggleRemember() { S.remember = !S.remember; $$('.psheet').forEach(p => p.classList.toggle('unchecked', !S.remember)); },
-    restart() { $('#end').classList.remove('on'); S.choice = { dir: null, ride: null }; S.remember = true; paintRemembered(); setMode('half'); show('feed'); $('#intro').classList.add('on'); },
-    again() { $('#end').classList.remove('on'); paintRemembered(); }
+    dfBack: closeFeed,
+    closeSheet,
+    toggleRemember() {
+      S.remember = !S.remember;
+      $$('.psheet').forEach(p => p.classList.toggle('unchecked', !S.remember));
+      if (!reduce) $$('.psheet.on .box').forEach(b => b.animate([{ transform: 'scale(1)' }, { transform: 'scale(.82)' }, { transform: 'scale(1.08)' }, { transform: 'scale(1)' }], { duration: 300, easing: OUT }));
+    },
+    restart() { location.href = location.pathname; },
+    async again() { await unlaunch(); }
   };
-  phone.addEventListener('click', e => {
+  phone.addEventListener('click', async e => {
     if (blockClick) return;
     const pick = e.target.closest('[data-pick]');
-    if (pick) { const kind = S.sheet, app = pick.dataset.pick; if (S.remember) S.choice[kind] = app; closeSheet(() => handoff(kind, app)); return; }
+    if (pick) {
+      const kind = S.sheet, app = pick.dataset.pick, icon = pick.querySelector('img');
+      const r = local(icon);
+      if (S.remember) S.choice[kind] = app;
+      closeSheet();
+      launch(kind, app, { getBoundingClientRect: () => { const p = phone.getBoundingClientRect(), k = scale(); return { left: p.left + r.x * k, top: p.top + r.y * k, width: r.w * k, height: r.h * k }; } });
+      return;
+    }
+    const go = e.target.closest('[data-act="dir"],[data-act="ride"]');
+    if (go) { openSheet(go.dataset.act, go); return; }
     const dish = e.target.closest('[data-dish]');
-    if (dish) { DISHES[dish.dataset.dish].feed ? openFeed(0) : hint('In this demo, try Spicy Frog'); return; }
+    if (dish) { DISHES[dish.dataset.dish].feed ? openFeed(dish.querySelector('.ph')) : nudge(dish); return; }
     const vid = e.target.closest('[data-vid]');
-    if (vid) { VIDEOS[vid.dataset.vid].feed !== undefined ? openFeed(0) : hint('In this demo, try Spicy Frog'); return; }
+    if (vid) { VIDEOS[vid.dataset.vid].feed !== undefined ? openFeed(vid) : nudge(vid); return; }
+    const like = e.target.closest('.act.like');
+    if (like) { setLiked(like, !like.classList.contains('liked')); return; }
     const a = e.target.closest('[data-act]');
-    if (a && ACT[a.dataset.act]) ACT[a.dataset.act]();
+    if (a && ACT[a.dataset.act]) { ACT[a.dataset.act](); return; }
+    if (S.screen === 'feed' && !S.busy) videoTap(e, $('#feed'));
+    else if (S.screen === 'dishfeed') { const i = Math.round(df.scrollTop / 696); videoTap(e, $$('.df-item')[i]); }
   });
-  // swipe up on feed (01) is not part of the task: nudge toward the tag
+  function nudge(el) {
+    if (!reduce) el.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-4px)' }, { transform: 'translateX(4px)' }, { transform: 'translateX(0)' }], { duration: 260 });
+    hint('In this demo, try Spicy Frog');
+  }
+  // swiping up on 01 is not part of the task: nudge toward the place tag
   let f01 = null;
   $('#feed').addEventListener('pointerdown', e => f01 = e.clientY);
-  $('#feed').addEventListener('pointerup', e => { if (f01 !== null && (f01 - e.clientY) / scale() > 60) hint('Tap the place tag to see this restaurant'); f01 = null; });
-
+  $('#feed').addEventListener('pointerup', e => {
+    if (f01 !== null && (f01 - e.clientY) / scale() > 60) {
+      hint('Tap the place tag to see this restaurant');
+      if (!reduce) $('#feed .anchor').animate([{ transform: 'scale(1)' }, { transform: 'scale(1.08)' }, { transform: 'scale(1)' }], { duration: 500, iterations: 2 });
+    }
+    f01 = null;
+  });
   // swipe down on hand-off sheets closes them
   let ps = null;
   $$('.psheet').forEach(p => {
@@ -341,6 +555,23 @@
     p.addEventListener('pointerup', e => { if (ps !== null && (e.clientY - ps) / scale() > 60) { suppressClick(); closeSheet(); } ps = null; });
   });
 
-  if (/[?&]skip=1/.test(location.search)) ACT.start();
+  /* ---------- desktop: touch-style cursor ---------- */
+  const dot = $('#touchDot');
+  if (window.matchMedia('(pointer: fine)').matches) {
+    document.body.classList.add('mouse');
+    phone.addEventListener('pointermove', e => { const p = local({ getBoundingClientRect: () => ({ left: e.clientX, top: e.clientY, width: 0, height: 0 }) }); dot.style.transform = `translate(${p.x - 18}px, ${p.y - 18}px)`; dot.classList.add('on'); });
+    phone.addEventListener('pointerleave', () => dot.classList.remove('on'));
+    phone.addEventListener('pointerdown', () => dot.classList.add('down'));
+    window.addEventListener('pointerup', () => dot.classList.remove('down'));
+  }
+  window.addEventListener('keydown', e => { if (e.key === 'r' || e.key === 'R') ACT.restart(); });
+
+  /* ---------- 01 ambient playback ---------- */
+  if (!reduce) $('#feed .cover').animate([{ transform: 'scale(1.0)' }, { transform: 'scale(1.06)' }], { duration: 14000, direction: 'alternate', iterations: Infinity, easing: 'ease-in-out' });
+
+  // init
+  setMode('half', 0); setSheet(844, 0);
+  requestAnimationFrame(() => setTab('overview', true));
+  if (/[?&]skip=1/.test(location.search)) { $('#intro').classList.remove('on'); }
   paintRemembered();
 })();

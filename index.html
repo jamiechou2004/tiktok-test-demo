@@ -17,6 +17,7 @@
   <!-- ============ 01 · For You ============ -->
   <section class="screen on" id="feed">
     <img class="cover" src="img/mala-full.jpg" alt="">
+    <div class="feed-ui">
     <div class="feed-top">
       <span class="ic" data-i="live"></span>
       <div class="feed-tabs"><span>Explore</span><span>Following</span><span class="active">For You</span></div>
@@ -30,6 +31,7 @@
         <div class="sound"><span class="ic" data-i="music"></span>original sound - spicyfoodie_atl</div>
       </div>
       <div class="rail" data-avatar="img/a_spicy.jpg" data-counts="24.1K,812,3,204,1,206"></div>
+    </div>
     </div>
     <nav class="tabbar">
       <div class="tab on"><span class="ic" data-i="home"></span>Home</div>
@@ -62,6 +64,7 @@
         <button data-sec="dishes">Dishes</button>
         <button data-sec="videos">Videos</button>
         <button data-sec="reviews">Reviews</button>
+        <i id="tabInk"></i>
       </div>
       <div class="sheet-scroll" id="sheetScroll">
         <div class="grabber"><i></i></div>
@@ -154,7 +157,9 @@
     <button class="remember" data-act="toggleRemember"><span class="box"><span class="ic" data-i="check"></span></span>Remember my choice</button>
   </div>
 
-  <div id="toast"><span class="spin"></span><span id="toastText">Opening…</span></div>
+  <div id="morph"><img alt=""></div>
+  <div id="launch"><img alt=""><div class="launch-status"><span class="spin"></span><span id="launchText">Opening</span></div></div>
+  <div id="touchDot"></div>
   <div id="hint"></div>
 
   <!-- shared chrome -->
@@ -162,18 +167,25 @@
   <div class="home-ind" id="homeInd"></div>
 
   <div class="overlay" id="end">
-    <h2 id="endTitle">Handing off</h2>
-    <p id="endBody"></p>
-    <button class="obtn primary" data-act="restart">Start over</button>
-    <button class="obtn ghost" data-act="again">Back to the place</button>
-    <div class="fine">Concept prototype for a design challenge. Not an official TikTok product. Prices and times are illustrative.</div>
+    <div class="card">
+      <span class="pill">Hand-off</span>
+      <h2 id="endTitle"></h2>
+      <p id="endBody"></p>
+      <p class="note" id="endNote"></p>
+      <button class="obtn primary" data-act="again">Back to Good Harvest</button>
+      <button class="obtn ghost" data-act="restart">Start over</button>
+    </div>
   </div>
   <div class="overlay on" id="intro">
-    <h2>You just saw this video.</h2>
-    <p>Decide whether this restaurant is worth going to tonight. If it is, get yourself on the way.</p>
-    <p>Think out loud as you go.</p>
-    <button class="obtn primary" data-act="start">Start</button>
-    <div class="fine">Concept prototype for a design challenge. Not an official TikTok product.</div>
+    <div class="card">
+      <span class="pill">Concept prototype</span>
+      <h2>You just saw this video.</h2>
+      <p>Decide whether this restaurant is worth going to tonight. If it is, get yourself on the way.</p>
+      <p class="note">Tap, swipe and scroll the way you would in TikTok. Think out loud.</p>
+      <button class="obtn primary" data-act="start">Start</button>
+    </div>
+    <div class="fine">Design challenge concept. Not an official TikTok product. Prices and times are illustrative.</div>
+  </div>
   </div>
 
 </div></div>
