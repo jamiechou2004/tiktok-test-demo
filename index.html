@@ -62,6 +62,7 @@
       <div class="tabs" id="tabs">
         <button class="on" data-sec="overview">Overview</button>
         <button data-sec="dishes">Dishes</button>
+        <button data-sec="combos">Combos</button>
         <button data-sec="videos">Videos</button>
         <button data-sec="reviews">Reviews</button>
         <i id="tabInk"></i>
@@ -78,6 +79,7 @@
           <div class="rating"><span class="ic" data-i="star"></span><b>4.6</b> Excellent (18)</div>
           <div class="status"><span class="open">Open</span><span class="rest">&nbsp;· 12:00 PM – 11:00 PM · $20-50 · Chinese Restaurant</span><span class="ic sm" data-i="chev"></span></div>
           <div class="getting"><span class="ic pin" data-i="pin"></span><span>Open until 11 PM</span><i></i><span>18 min drive</span><i></i><span>from $20 ride</span><span class="ic sm" data-i="chev"></span></div>
+          <div class="wait"><span class="ic" data-i="hourglass"></span><b>No wait now</b><span>· Usually busy Fri–Sat 6–8 PM</span></div>
           <div class="pills">
             <button><span class="ic" data-i="website"></span>Website</button>
             <button><span class="ic" data-i="map"></span>Map</button>
@@ -89,6 +91,11 @@
         <section class="sec" id="sec-dishes">
           <div class="sec-head"><h3>Signature dishes<em> · 4</em></h3><a class="all"><span class="half-only">View all</span><span class="full-only">All</span><span class="ic xs" data-i="chev"></span></a></div>
           <div class="dish-row" id="dishRow"></div>
+        </section>
+
+        <section class="sec" id="sec-combos">
+          <div class="sec-head"><h3>Popular combos<em> · 3</em></h3><a class="all"><span class="half-only">View all</span><span class="full-only">All</span><span class="ic xs" data-i="chev"></span></a></div>
+          <div class="combo-row" id="comboRow"></div>
         </section>
 
         <section class="sec full-only" id="sec-videos">

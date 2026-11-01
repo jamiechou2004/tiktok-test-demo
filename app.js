@@ -33,6 +33,7 @@
     search: '<svg width="25" height="26" viewBox="0 0 25 26" fill="none" style="filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.3))"><path d="M20.6 20.5L16.1 16M11.1 4C7.23 4 4.1 7.13 4.1 11C4.1 14.87 7.23 18 11.1 18C14.97 18 18.1 14.87 18.1 11C18.1 7.13 14.97 4 11.1 4Z" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>',
     live: '<svg width="26" height="24" viewBox="0 0 26 24" fill="none"><path d="M9.43 1.46L12.9 4.74M16.41 1.46L13.42 4.74" stroke="white" stroke-width="1.36" stroke-linecap="round"/><path d="M2.95 7.46V5.94C2.95 5.45 3.34 5.06 3.82 5.06H22.02C22.5 5.06 22.89 5.45 22.89 5.94V7.46M2.95 19.78V21.5C2.95 21.99 3.34 22.38 3.82 22.38H22.02C22.5 22.38 22.89 21.99 22.89 21.5V19.78" stroke="white" stroke-width="1.36" stroke-linecap="round"/><path d="M2.62 11.22V16.86H6.19M8.46 11.22V16.86M10.5 11.22L13.19 16.86L15.89 11.22M23.38 11.22H18.58V16.86H23.38M18.58 14.04H22.73" stroke="white" stroke-width="1.82" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     anchor: '<svg width="19" height="19" viewBox="0 0 19 19" fill="none"><rect width="19" height="19" rx="4" fill="#33B873"/><path d="M9.5 14.38C9.5 14.38 12.75 11.34 12.75 8.69C12.75 6.89 11.3 5.44 9.5 5.44C7.7 5.44 6.25 6.89 6.25 8.69C6.25 11.34 9.5 14.38 9.5 14.38Z" stroke="white" stroke-width="2.2"/><circle cx="9.5" cy="8.69" r="1.19" fill="white"/></svg>',
+    hourglass: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M6 3.5H18M6 20.5H18" stroke="#2E8B8B" stroke-width="2" stroke-linecap="round"/><path d="M7.5 3.5V7C7.5 8.5 9 9.8 10.4 10.9L12 12L13.6 10.9C15 9.8 16.5 8.5 16.5 7V3.5M7.5 20.5V17C7.5 15.5 9 14.2 10.4 13.1L12 12L13.6 13.1C15 14.2 16.5 15.5 16.5 17V20.5" stroke="#2E8B8B" stroke-width="2" stroke-linejoin="round"/></svg>',
     redpin: '<svg width="12" height="12" viewBox="0 0 12 12"><path d="M6 1C4.07 1 2.5 2.57 2.5 4.5C2.5 7.13 6 11 6 11C6 11 9.5 7.13 9.5 4.5C9.5 2.57 7.93 1 6 1Z" fill="#E8323C"/></svg>',
     signal: '<svg width="18" height="12" viewBox="0 0 18 12" fill="white"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>',
     wifi: '<svg width="16" height="12" viewBox="0 0 16 12" fill="white"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.1-1.2C13.2 1.6 10.7.6 8 .6S2.8 1.6.9 3.5L2 4.7c1.6-1.5 3.7-2.4 6-2.4zm0 3.4c1.4 0 2.6.5 3.6 1.4l1.1-1.2C11.4 4.7 9.8 4 8 4s-3.4.7-4.7 1.9l1.1 1.2c1-.9 2.2-1.4 3.6-1.4zm0 3.4c.5 0 1 .2 1.3.5L8 11.4 6.7 9.6c.3-.3.8-.5 1.3-.5z"/></svg>',
@@ -59,10 +60,15 @@
 
   /* ---------------- content ---------------- */
   const DISHES = [
-    { name: 'Mala Dry Pot', n: 41, img: 'img/mala-full.jpg' },
-    { name: 'Spicy Frog', n: 18, img: 'img/frog-full.jpg', feed: true },
-    { name: 'Hot Pot', n: 27, img: 'img/hotpot.jpg' },
-    { name: 'Lunch Special', n: 12, img: 'img/lunch.jpg' }
+    { name: 'Mala Dry Pot', price: '$18.95', n: '412 ordered', img: 'img/mala-full.jpg' },
+    { name: 'Spicy Frog', price: '$22.95', n: '186 ordered', img: 'img/frog-full.jpg', feed: true },
+    { name: 'Hot Pot', price: '$32.95', n: '275 ordered', img: 'img/hotpot.jpg' },
+    { name: 'Lunch Special', price: '$12.95', n: '130 ordered', img: 'img/lunch.jpg' }
+  ];
+  const COMBOS = [
+    { who: 'For 2', items: 'Mala Dry Pot · Spicy Frog · Rice', price: '$46', n: '1,208 ordered', imgs: ['img/mala-full.jpg', 'img/frog-full.jpg'] },
+    { who: 'For 4', items: 'Hot Pot · Spicy Frog · Cumin Lamb · Dan Dan Noodles', price: '$98', n: '640 ordered', imgs: ['img/hotpot.jpg', 'img/lamb.jpg'] },
+    { who: 'Solo lunch', items: 'Lunch Special · Tea', price: '$14', n: '2,310 ordered', imgs: ['img/lunch.jpg', 'img/dandan.jpg'] }
   ];
   const VIDEOS = [
     { img: 'img/frog-full.jpg', when: '2 days ago', feed: 0 },
@@ -111,7 +117,13 @@
   $('#dishRow').innerHTML = DISHES.map((d, i) => `
     <div class="dish${i === 0 ? ' current' : ''}" data-dish="${i}">
       <div class="ph" style="background-image:url(${d.img})"></div>
-      <b>${d.name}</b><span>${d.n} videos</span>
+      <b>${d.name}</b><em>${d.price}</em><span>${d.n}</span>
+    </div>`).join('');
+  $('#comboRow').innerHTML = COMBOS.map(c => `
+    <div class="combo">
+      <div class="pics">${c.imgs.map(i => `<div style="background-image:url(${i})"></div>`).join('')}</div>
+      <div class="top"><b>${c.who}</b><b>${c.price}</b></div>
+      <p>${c.items}</p><span>${c.n}</span>
     </div>`).join('');
 
   // video grid
@@ -316,7 +328,7 @@
     if (S.mode !== 'full' || Date.now() < spyLock) return;
     const y = scroller.scrollTop + 60;
     let cur = 'overview';
-    ['dishes', 'videos', 'reviews'].forEach(s => { if ($('#sec-' + s).offsetTop <= y) cur = s; });
+    ['dishes', 'combos', 'videos', 'reviews'].forEach(s => { if ($('#sec-' + s).offsetTop <= y) cur = s; });
     if (scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 4) cur = 'reviews';
     if (!$('#tabs button.on') || $('#tabs button.on').dataset.sec !== cur) setTab(cur);
   }, { passive: true });
