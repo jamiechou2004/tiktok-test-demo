@@ -4,6 +4,21 @@
   /* ---------------- icons (exported from Figma components) ---------------- */
   const G = (id, a, b) => `<linearGradient id="${id}" x1="12" y1="${a}" x2="12" y2="${b}" gradientUnits="userSpaceOnUse"><stop stop-color="#EA4359"/><stop offset="1" stop-color="#EC9EEB"/></linearGradient>`;
   const ICON = {
+    walk: `<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Icon/Walk">
+<path id="Vector" d="M13.5 6.5C14.6046 6.5 15.5 5.60457 15.5 4.5C15.5 3.39543 14.6046 2.5 13.5 2.5C12.3954 2.5 11.5 3.39543 11.5 4.5C11.5 5.60457 12.3954 6.5 13.5 6.5Z" fill="#161823"/>
+<path id="Vector_2" d="M9 21L11 15.5M11 15.5L13.5 17.5V21M11 15.5L12 10M17 13.5L14.5 12.5L12 10L9 11.5V14.5" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" stroke="#161823"/>
+</g>
+</svg>
+`,
+    car: `<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Icon/Car">
+<path id="Vector" d="M5.2 9.5L6.6 5.6C6.9 4.7 7.7 4.2 8.6 4.2H15.4C16.3 4.2 17.1 4.7 17.4 5.6L18.8 9.5C20 9.9 20.8 11 20.8 12.3V17.5C20.8 18.3 20.1 19 19.3 19H18C17.2 19 16.5 18.3 16.5 17.5V17H7.5V17.5C7.5 18.3 6.8 19 6 19H4.7C3.9 19 3.2 18.3 3.2 17.5V12.3C3.2 11 4 9.9 5.2 9.5Z" fill="#161823"/>
+<path id="Vector_2" d="M7.6 11.6H6.6C6.04772 11.6 5.6 12.0477 5.6 12.6C5.6 13.1523 6.04772 13.6 6.6 13.6H7.6C8.15228 13.6 8.6 13.1523 8.6 12.6C8.6 12.0477 8.15228 11.6 7.6 11.6Z" fill="white"/>
+<path id="Vector_3" d="M17.4 11.6H16.4C15.8477 11.6 15.4 12.0477 15.4 12.6C15.4 13.1523 15.8477 13.6 16.4 13.6H17.4C17.9523 13.6 18.4 13.1523 18.4 12.6C18.4 12.0477 17.9523 11.6 17.4 11.6Z" fill="white"/>
+</g>
+</svg>
+`,
     back: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M15 4.5L7.5 12L15 19.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     bookmark: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M7 3H17C17.83 3 18.5 3.67 18.5 4.5V20.3C18.5 20.71 18.03 20.95 17.7 20.7L12 16.5L6.3 20.7C5.97 20.95 5.5 20.71 5.5 20.3V4.5C5.5 3.67 6.17 3 7 3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>',
     share: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M13.6 4.2L21 11.4L13.6 18.6V14.5C8.2 14.5 5.2 16.4 3 19.6C3.5 13.7 7.4 9.6 13.6 8.9V4.2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>',
@@ -79,14 +94,14 @@
     { img: 'img/lamb.jpg', when: '2 weeks ago' }
   ];
   const REVIEWS = [
-    { who: 'Eaternally Happy', av: 'img/a_eat.jpg', date: 'Jun 21, 2026 · Post', pin: true,
+    { who: 'Eaternally Happy', av: 'img/figma/5c293.png', date: 'Jun 21, 2026 · Post', pin: true,
       text: 'Good Harvest - Doraville, GA&nbsp; They specializes in authentic Sichuan hot pots, dry pots, and traditional Chinese cuisine. Food was very good!&nbsp; We ord… more',
-      media: [{ v: 'img/dandan.jpg' }] },
-    { who: 'Lil Nisa', av: 'img/a_nisa.jpg', date: 'Sep 27, 2026 · Review', lv: ['Lv.1', '#FFF4DA', '#C98A1B'], stars: 5,
+      media: [{ v: 'img/figma/38771.png' }] },
+    { who: 'Lil Nisa', av: 'img/figma/da16b.png', date: 'Sep 27, 2026 · Review', lv: ['Lv.1', '#FFF4DA', '#C98A1B'], stars: 5,
       text: 'This was my first time trying K-pot style food &amp; boy was is amazing!!! me and my friend made a hour trip and were not disappointed whatsoever! with a… more',
-      media: [{ p: 'img/table.jpg' }, { p: 'img/closeup-thumb.jpg' }] },
-    { who: 'Vanesa Beltran', av: 'img/a_van.jpg', date: 'Jun 12, 2026 · Post',
-      text: 'Tried a new spot ! Recommend 9/10 need to come back and try out more from their menu', media: [{ v: 'img/hotpot.jpg' }] },
+      media: [{ p: 'img/figma/54c43.png' }, { p: 'img/figma/4354b.png' }] },
+    { who: 'Vanesa Beltran', av: 'img/figma/dcbac.png', date: 'Jun 12, 2026 · Post',
+      text: 'Tried a new spot ! Recommend 9/10 need to come back and try out more from their menu', media: [{ v: 'img/figma/7b8a2.png' }] },
     { who: 'averysabile', av: 'img/a_avery.jpg', date: 'Oct 5, 2026 · Post',
       text: 'Dinner at Good Harvest in Doraville', media: [{ v: 'img/lamb.jpg' }] },
     { who: 'tray | chicago foodie', av: 'img/a_tray.jpg', date: 'Jan 14, 2026 · Review', lv: ['Lv.5', '#FFEBDD', '#E0661B'], stars: 5,
@@ -94,7 +109,7 @@
   ];
   const FEED = [
     { img: 'img/frog-full.jpg', av: 'img/a_atl.jpg', user: 'atl_eats', when: '2 days ago', cap: 'the spicy frog here is no joke 🌶️ go hungry #doraville #atlantafood', counts: ['24.1K', '812', '3,204', '1,206'], played: 40 },
-    { img: 'img/closeup-full.jpg', av: 'img/a_nisa.jpg', user: 'lilnisa', when: '5 days ago', cap: 'came back for the frog and it’s still this good. get it extra spicy #doraville #sichuanfood', counts: ['8,931', '204', '1,120', '388'], played: 96 },
+    { img: 'img/closeup-full.jpg', av: 'img/figma/da16b.png', user: 'lilnisa', when: '5 days ago', cap: 'came back for the frog and it’s still this good. get it extra spicy #doraville #sichuanfood', counts: ['8,931', '204', '1,120', '388'], played: 96 },
     { img: 'img/frog2-full.jpg', av: 'img/a_tray.jpg', user: 'tray.eats', when: '1 week ago', cap: 'the spicy frog at Good Harvest is worth the drive #atlantafood #doraville', counts: ['41.2K', '1,503', '6,870', '2,114'], paid: true, played: 150 }
   ];
 
@@ -113,12 +128,10 @@
   const r01 = $('#feed .rail');
   r01.innerHTML = rail(r01.dataset.avatar, ['24.1K', '812', '3,204', '1,206']);
 
-  // dishes
-  $('#dishRow').innerHTML = DISHES.map((d, i) => `
-    <div class="dish${i === 0 ? ' current' : ''}" data-dish="${i}">
-      <div class="ph" style="background-image:url(${d.img})"></div>
-      <b>${d.name}</b><em>${d.price}</em><span>${d.n}</span>
-    </div>`).join('');
+  // Compact recommendations; photo opens the existing video feed, text opens Menu.
+  const recommendationNames = ['Dry Pot Lotus Root', 'Spicy Frog', 'Boiled Fish in Chili Oil', 'Garlic Pork Belly'];
+  const recommendationPhotos = ['1e55b.png', 'a7cbf.png', '984b6.png', 'ae0c8.png'];
+  $('#dishRow').innerHTML = recommendationNames.map((name, i) => `<div class="dish"><button class="ph" data-photo="${i}" aria-label="Watch ${name}" style="background-image:url(img/figma/${recommendationPhotos[i]})"><span>TOP·${i+1}</span></button><button data-act="menu" class="dish-name">${name}</button><span>${[63,33,53,33][i]} recs</span></div>`).join('');
   $('#comboRow').innerHTML = COMBOS.map(c => `
     <div class="combo">
       <div class="pics">${c.imgs.map(i => `<div style="background-image:url(${i})"></div>`).join('')}</div>
@@ -127,14 +140,14 @@
     </div>`).join('');
 
   // video grid
-  $('#vgrid').innerHTML = VIDEOS.map((v, i) => `
+  document.createElement('div').innerHTML = VIDEOS.map((v, i) => `
     <div class="vtile" data-vid="${i}" style="background-image:url(${v.img})">
       ${v.paid ? '<span class="chip">Paid partnership</span>' : ''}
       <span class="meta">${ICON.playw}${v.when}</span>
     </div>`).join('');
 
   // reviews
-  $('#reviews').innerHTML = REVIEWS.map(r => `
+  $('#reviews').innerHTML = REVIEWS.slice(0, 3).map(r => `
     <div class="review">
       <div class="rv-head"><img src="${r.av}" alt="">
         <div><div class="rv-name">${r.who}${r.lv ? `<span class="lv" style="background:${r.lv[1]};color:${r.lv[2]}">${r.lv[0]}</span>` : ''}</div><div class="rv-date">${r.date}</div></div>
@@ -193,7 +206,8 @@
     syncChrome();
   }
   function syncChrome() {
-    const lightBg = (S.screen === 'place') || !!S.sheet;
+    const lightBg = ['place','menu','guide'].includes(S.screen) || !!S.sheet;
+    $('#statusbar').classList.toggle('dark-text', S.screen === 'menu' || (S.screen === 'place' && place.classList.contains('dishes-mode')));
     $('#homeInd').classList.toggle('dark', lightBg);
   }
 
@@ -211,7 +225,7 @@
   function setMode(m, ms = 460) {
     S.mode = m;
     place.classList.toggle('full', m === 'full');
-    if (m === 'half') { scroller.scrollTop = 0; setTab('overview', true); }
+    if (m === 'half') { showPlaceBody(false); scroller.scrollTop = 0; setTab('overview', true); }
     setSheet(m === 'full' ? FULL : HALF, ms);
   }
 
@@ -317,21 +331,13 @@
     ink.style.transform = `translateX(${on.offsetLeft + on.offsetWidth / 2 - 13}px)`;
   }
   let spyLock = 0;
-  $('#tabs').addEventListener('click', e => {
-    const b = e.target.closest('button'); if (!b) return;
-    const target = $('#sec-' + b.dataset.sec);
-    spyLock = Date.now() + 700;
-    scroller.scrollTo({ top: b.dataset.sec === 'overview' ? 0 : target.offsetTop - 4, behavior: reduce ? 'auto' : 'smooth' });
-    setTab(b.dataset.sec);
-  });
+  $('#tabs').addEventListener('click', e => { const b=e.target.closest('button'); if(b) navigateTab(b.dataset.sec); });
   scroller.addEventListener('scroll', () => {
-    if (S.mode !== 'full' || Date.now() < spyLock) return;
-    const y = scroller.scrollTop + 60;
-    let cur = 'overview';
-    ['dishes', 'combos', 'videos', 'reviews'].forEach(s => { if ($('#sec-' + s).offsetTop <= y) cur = s; });
-    if (scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 4) cur = 'reviews';
-    if (!$('#tabs button.on') || $('#tabs button.on').dataset.sec !== cur) setTab(cur);
-  }, { passive: true });
+    if (S.mode !== 'full' || place.classList.contains('dishes-mode') || Date.now() < spyLock) return;
+    let cur='overview'; const y=scroller.scrollTop+60;
+    ['combos','reviews'].forEach(id=>{if($('#sec-'+id).offsetTop<=y) cur=id;});
+    setTab(cur);
+  }, {passive:true});
 
   /* ---------- dish → feed: thumbnail expands into the video ---------- */
   const df = $('#dfScroll'), dfEl = $('#dishfeed');
@@ -346,7 +352,7 @@
     dfEl.classList.add('on', 'entering');
     await anim(morph, [{ left: r.x + 'px', top: r.y + 'px', width: r.w + 'px', height: r.h + 'px', borderRadius: '10px' },
                        { left: '0px', top: '0px', width: '390px', height: '772px', borderRadius: '0px' }], { duration: 480, easing: IOS });
-    S.screen = 'dishfeed'; place.classList.remove('on'); syncChrome();
+    $('#'+S.from).classList.remove('on'); S.screen = 'dishfeed'; syncChrome();
     dfEl.classList.remove('entering');
     morph.style.display = 'none'; morph.getAnimations().forEach(a => a.cancel());
     startPlayback();
@@ -357,7 +363,7 @@
     if (S.busy) return; S.busy = true;
     const back = S.from === 'dishfeed' ? 'place' : S.from;
     const i = Math.round(df.scrollTop / 696);
-    place.classList.add('on'); S.screen = back; syncChrome();
+    $('#'+back).classList.add('on'); S.screen = back; syncChrome();
     if (feedSource && feedSource.isConnected) {
       const r = local(feedSource);
       const img = morph.querySelector('img'); img.src = FEED[i].img;
@@ -512,6 +518,9 @@
     },
     openPlace, closePlace,
     collapse() { setMode('half'); },
+    menu() { openMenu(); }, guide() { pushPage('guide'); }, pop() { popPage(); },
+    reviews() { navigateTab('reviews'); }, combos() { navigateTab('combos'); },
+    demo() { hint('Not in this demo'); }, restaurant() { hint('Showing the restaurant’s guide'); },
     dfBack: closeFeed,
     closeSheet,
     toggleRemember() {
@@ -524,6 +533,7 @@
   };
   phone.addEventListener('click', async e => {
     if (blockClick) return;
+    if(e.target.closest('[data-category],[data-page-tab],[data-sec]')) return;
     const pick = e.target.closest('[data-pick]');
     if (pick) {
       const kind = S.sheet, app = pick.dataset.pick, icon = pick.querySelector('img');
@@ -535,6 +545,8 @@
     }
     const go = e.target.closest('[data-act="dir"],[data-act="ride"]');
     if (go) { openSheet(go.dataset.act, go); return; }
+    const photo = e.target.closest('[data-photo]');
+    if(photo) { if(Number(photo.dataset.photo)===1) openFeed(photo); else hint('Not in this demo'); return; }
     const dish = e.target.closest('[data-dish]');
     if (dish) { DISHES[dish.dataset.dish].feed ? openFeed(dish.querySelector('.ph')) : nudge(dish); return; }
     const vid = e.target.closest('[data-vid]');
@@ -543,6 +555,7 @@
     if (like) { setLiked(like, !like.classList.contains('liked')); return; }
     const a = e.target.closest('[data-act]');
     if (a && ACT[a.dataset.act]) { ACT[a.dataset.act](); return; }
+    if(e.target.closest('button,a,.act,.head-actions .ic,.feed-top,.tabbar')) { hint('Not in this demo'); return; }
     if (S.screen === 'feed' && !S.busy) videoTap(e, $('#feed'));
     else if (S.screen === 'dishfeed') { const i = Math.round(df.scrollTop / 696); videoTap(e, $$('.df-item')[i]); }
   });
@@ -586,4 +599,57 @@
   requestAnimationFrame(() => setTab('overview', true));
   if (/[?&]skip=1/.test(location.search)) { $('#intro').classList.remove('on'); }
   paintRemembered();
+
+  /* Final POI screens: shared rows, page history and six menu categories. */
+  const MENU = {"Signature": [{"name": "Dry Pot Lotus Root", "price": "$18.95", "recs": 1861, "quote": "Crispy outside, tender inside, house secret spice", "img": "img/figma/5e87c.png", "tag": "Signature"}, {"name": "Spicy Frog", "price": "$22.95", "recs": 128, "quote": "Numbing-hot, fresh frog, stir-fried on high heat", "img": "img/figma/cd38e.png", "tag": "Signature"}, {"name": "Boiled Fish in Chili Oil", "price": "$32.95", "recs": 87, "quote": "Layered chili broth, fresh fish, made to order", "img": "img/figma/6e48f.png", "tag": "Signature"}, {"name": "Garlic Pork Belly", "price": "$12.95", "recs": 36, "quote": "Thin-sliced, garlic sauce, cold starter", "img": "img/figma/29847.png", "tag": "Signature"}, {"name": "Mapo Beef Rib", "price": "$24.95", "recs": 14, "quote": "Rich, beef rib, slow-braised", "img": "img/figma/fb44f.png", "tag": "Signature"}, {"name": "Cold Sesame Noodles", "price": "$9.95", "recs": 10, "quote": "Nutty, chewy, hand-pulled", "img": "img/figma/2a11a.png", "tag": "Signature"}], "Meat": [{"name": "Twice-Cooked Pork", "price": "$16.95", "tag": "Popular", "recs": 412, "quote": "Smoky, fatty-lean belly, leek", "img": "img/figma/56e03.png"}, {"name": "Peppercorn Duck", "price": "$21.95", "tag": "Spicy", "recs": 233, "quote": "Numbing Sichuan pepper, crispy skin", "img": "img/figma/93b8e.png"}, {"name": "Char Siu Beef", "price": "$19.95", "tag": "", "recs": 188, "quote": "Sweet glaze, sliced thin", "img": "img/figma/51ee4.png"}, {"name": "Braised Pigeon Legs", "price": "$15.95", "tag": "", "recs": 96, "quote": "Fall-off-the-bone, soy braise", "img": "img/figma/a1903.png"}, {"name": "Mushroom Duck Stew", "price": "$22.95", "tag": "", "recs": 74, "quote": "Slow-cooked, earthy broth", "img": "img/figma/8376c.png"}], "Veg": [{"name": "Dry Pot Lotus Root", "price": "$18.95", "tag": "Popular", "recs": 1861, "quote": "Crispy outside, tender inside", "img": "img/figma/2ad1d.png"}, {"name": "Garlic Edamame", "price": "$6.95", "tag": "", "recs": 305, "quote": "Salted, garlic, cold starter", "img": "img/figma/3b23f.png"}, {"name": "Celery & Lily Bulb Stir-fry", "price": "$10.95", "tag": "", "recs": 142, "quote": "Light, crunchy, not spicy", "img": "img/figma/0b961.png"}, {"name": "Mapo Tofu", "price": "$12.95", "tag": "Spicy", "recs": 527, "quote": "Silky tofu, chili bean paste", "img": "img/figma/8d056.png"}], "Dessert": [{"name": "Egg Tart", "price": "$5.95", "tag": "Popular", "recs": 388, "quote": "Flaky crust, warm custard", "img": "img/figma/1f671.png"}, {"name": "Sesame Bun", "price": "$6.95", "tag": "", "recs": 204, "quote": "Soft, black-sesame filling", "img": "img/figma/f332f.png"}, {"name": "Osmanthus Pastry", "price": "$5.95", "tag": "", "recs": 119, "quote": "Crumbly, floral, light sweet", "img": "img/figma/03e0f.png"}, {"name": "Bird's Nest Pudding", "price": "$8.95", "tag": "", "recs": 67, "quote": "Chilled, coconut milk", "img": "img/figma/8116f.png"}], "Snacks": [{"name": "Cold Sesame Noodles", "price": "$9.95", "tag": "Popular", "recs": 10, "quote": "Nutty, chewy, hand-pulled", "img": "img/figma/2c717.png"}, {"name": "Garlic Edamame", "price": "$6.95", "tag": "", "recs": 305, "quote": "Salted, garlic, cold starter", "img": "img/figma/3b23f.png"}, {"name": "Claypot Rice", "price": "$13.95", "tag": "", "recs": 156, "quote": "Crispy bottom, sausage", "img": "img/figma/b7455.png"}, {"name": "Garlic Crayfish (small)", "price": "$14.95", "tag": "Spicy", "recs": 221, "quote": "Shell-on, garlic butter", "img": "img/figma/21f33.png"}], "Soup": [{"name": "Yellow Croaker Soup", "price": "$18.95", "tag": "Popular", "recs": 173, "quote": "Milky broth, pickled veg", "img": "img/figma/6e48f.png"}, {"name": "Pickled Fish Soup", "price": "$19.95", "tag": "Spicy", "recs": 342, "quote": "Sour-hot, tender fish", "img": "img/figma/6e48f.png"}, {"name": "Stone Frog Soup", "price": "$22.95", "tag": "", "recs": 88, "quote": "Clear broth, ginger", "img": "img/figma/cd38e.png"}, {"name": "Crab & Tofu Soup", "price": "$16.95", "tag": "", "recs": 59, "quote": "Sweet crab, soft tofu", "img": "img/hotpot.jpg"}]};
+  const pageStack=[]; let category='Signature';
+  const listMarkup=(items, menu=false)=>items.map((d,i)=>`<article class="menu-dish"><button class="menu-photo" data-photo="${d.name==='Spicy Frog'?1:0}" aria-label="Watch ${d.name}"><img src="${d.img}" alt="${d.name}"></button><button class="menu-dish-info" ${menu?'data-act="demo"':'data-act="menu"'}><div class="dish-title"><b>${d.name}</b><strong>${d.price}</strong></div><div class="dish-tags">${d.tag?`<span class="dish-tag ${d.tag==='Spicy'?'spicy':''}">${d.tag}</span>`:''}<span class="recommend ${d.recs>=100?'popular':''}">${d.recs} recommend</span></div><p>“${d.quote}”</p></button></article>`).join('');
+  function showPlaceBody(dishes) {
+    place.classList.toggle('dishes-mode',dishes);
+    $('#dishesTab').hidden=!dishes;
+    if(dishes) $('#dishesList').innerHTML=listMarkup(MENU.Signature);
+    syncChrome();
+  }
+  function navigateTab(tab) {
+    if(tab==='more') return hint('Not in this demo');
+    if(S.screen==='menu') { pageStack.length=0; show('place'); }
+    if(S.mode!=='full') setMode('full');
+    showPlaceBody(tab==='dishes');
+    spyLock=Date.now()+800; setTab(tab);
+    if(tab==='dishes') scroller.scrollTop=0;
+    else scroller.scrollTo({top:tab==='overview'?0:$('#sec-'+tab).offsetTop-12,behavior:reduce?'auto':'smooth'});
+  }
+  function pushPage(id) {
+    if(S.busy) return;
+    pageStack.push({screen:S.screen,top:scroller.scrollTop,category});
+    show(id); const el=$('#'+id);
+    el.animate(reduce?[{opacity:0},{opacity:1}]:[{transform:'translateX(100%)'},{transform:'translateX(0)'}],{duration:D(320),easing:IOS});
+    if(id==='guide') $('.guide-scroll').scrollTop=0;
+  }
+  async function popPage() {
+    if(S.busy) return; const prev=pageStack.pop(); if(!prev) return show('place');
+    S.busy=true; const el=$('#'+S.screen);
+    await anim(el,reduce?[{opacity:1},{opacity:0}]:[{transform:'translateX(0)'},{transform:'translateX(100%)'}],{duration:320,easing:IOS});
+    show(prev.screen); el.getAnimations().forEach(a=>a.cancel());scroller.scrollTop=prev.top;S.busy=false;
+  }
+  function openMenu() { category='Signature'; renderCategory(); pushPage('menu'); $('.menu-scroll').scrollTop=0; }
+  function renderCategory() {
+    $('.category-chips').innerHTML=Object.keys(MENU).map(c=>`<button data-category="${c}" class="${c===category?'on':''}" aria-pressed="${c===category}">${c}</button>`).join('');
+    $('#menuList').innerHTML=listMarkup(MENU[category],true);
+    $('#menuList').animate([{opacity:0},{opacity:1}],{duration:D(180)});
+  }
+  $('.category-chips').addEventListener('click',e=>{const b=e.target.closest('[data-category]');if(!b)return;category=b.dataset.category;renderCategory();$('.menu-scroll').scrollTop=0;$(`[data-category="${category}"]`).scrollIntoView({block:'nearest',inline:'nearest',behavior:reduce?'auto':'smooth'});});
+  $('.menu-tabs').addEventListener('click',e=>{const b=e.target.closest('[data-page-tab]');if(b)navigateTab(b.dataset.pageTab);});
+  $('.menu-scroll').addEventListener('scroll',()=>$('.menu-sticky').classList.toggle('scrolled',$('.menu-scroll').scrollTop>0),{passive:true});
+  const NEARBY=[['Masterpiece','Sichuan · Duluth · $$','4.6 (812)','6.2 mi','Also does dry pot','f4a8d.png'],["Gu’s Kitchen",'Sichuan · Chamblee · $$','4.4 (355)','2.3 mi','Closer · open now','a7c8c.png'],['Chong Qing Hot Pot','Hot pot · Duluth · $$$','4.5 (240)','7.8 mi','Group-friendly','09f0c.png'],['Tasty China II','Sichuan · Norcross · $$','4.3 (510)','8.9 mi','Famous for whole fish','984b6.png'],['Northern China Eatery','Dongbei · Doraville · $','4.5 (1200)','0.4 mi','Walkable · dumplings','09bf9.png'],['Bo Bo Garden','Cantonese · Doraville · $$','4.4 (430)','0.9 mi','Late night','f0bfd.png']];
+  let nearbyCount=0,loading=false;
+  function addNearby(n){for(let i=0;i<n;i++){const d=NEARBY[nearbyCount++%NEARBY.length];$('#nearbyRows').insertAdjacentHTML('beforeend',`<button class="nearby-row" data-act="demo"><img src="img/figma/${d[5]}" alt="${d[0]}"><div><b>${d[0]}</b><p>${d[1]}</p><p>${ICON.star} ${d[2]} · ${d[3]}</p><small>${d[4]}</small></div><span>›</span></button>`);}}
+  addNearby(6);
+  new IntersectionObserver(entries=>{if(!entries[0].isIntersecting||loading||S.screen!=='place'||S.mode!=='full')return;loading=true;setTimeout(()=>{addNearby(3);loading=false;},600);},{root:scroller}).observe($('#nearbyLoading'));
+  // Mark decorative action-looking controls as actionable for usability testing.
+  $$('.head-actions .ic').forEach(el=>{el.setAttribute('role','button');el.tabIndex=0;el.dataset.act='demo';});
+  $$('.sec-head .all').forEach(el=>{if(!el.dataset.act)el.dataset.act='demo';});
+  document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.matches('[role="button"]'))e.target.click();if(e.key==='Escape'&&pageStack.length)popPage();});
+  document.addEventListener('error',e=>{if(e.target instanceof HTMLImageElement&&!e.target.dataset.fallback){e.target.dataset.fallback='true';e.target.src='img/mala-full.jpg';}},true);
+  paintIcons(document);
 })();

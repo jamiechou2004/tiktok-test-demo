@@ -63,8 +63,8 @@
         <button class="on" data-sec="overview">Overview</button>
         <button data-sec="dishes">Dishes</button>
         <button data-sec="combos">Combos</button>
-        <button data-sec="videos">Videos</button>
-        <button data-sec="reviews">Reviews</button>
+
+        <button data-sec="reviews">Reviews</button><button data-sec="more">More</button>
         <i id="tabInk"></i>
       </div>
       <div class="sheet-scroll" id="sheetScroll">
@@ -72,42 +72,35 @@
 
         <section class="sec" id="sec-overview">
           <div class="place-head">
-            <img class="avatar28" src="img/store.jpg" alt="">
-            <div class="name"><b>Good Harvest</b><span>Sichuan · Doraville</span></div>
+            <img class="avatar28" src="img/figma/8cb31.png" alt="">
+            <div class="name"><b>Good Harvest</b><span>Sichuan · $20–50 · Doraville</span></div>
             <div class="head-actions"><span class="ic dark" data-i="share"></span><span class="ic dark" data-i="bookmark"></span><span class="ic dark" data-i="more"></span></div>
           </div>
-          <div class="rating"><span class="ic" data-i="star"></span><b>4.6</b> Excellent (18)</div>
-          <div class="status"><span class="open">Open</span><span class="rest">&nbsp;· 12:00 PM – 11:00 PM · $20-50 · Chinese Restaurant</span><span class="ic sm" data-i="chev"></span></div>
-          <div class="getting"><span class="ic pin" data-i="pin"></span><span>Open until 11 PM</span><i></i><span>18 min drive</span><i></i><span>from $20 ride</span><span class="ic sm" data-i="chev"></span></div>
-          <div class="wait"><span class="ic" data-i="hourglass"></span><b>No wait now</b><span>· Usually busy Fri–Sat 6–8 PM</span></div>
-          <div class="pills">
-            <button><span class="ic" data-i="website"></span>Website</button>
-            <button><span class="ic" data-i="map"></span>Map</button>
-            <button><span class="ic" data-i="call"></span>Call</button>
-            <button><span class="ic" data-i="review"></span>Review</button>
+          <div class="stats-capsule half-only"><button data-act="reviews"><small>18 reviews</small><b><span class="ic heart" data-i="star"></span> 4.6 Excellent</b></button><button data-act="demo"><small>Hours</small><b>12–11 PM</b></button><button data-act="demo"><small>Per person</small><b>$35</b></button></div>
+          <div class="overview-details full-only">
+            <div class="rating-line"><span><span class="ic" data-i="star"></span><b>4.6</b> Excellent (18)</span><button data-act="demo"><em>Open</em> · until 11 PM ›</button></div>
+            <div class="address-actions"><div class="address-copy"><button class="drive-wait" data-act="demo">18 min drive │ No wait now ›</button><p>Busy Fri–Sat 6–8 PM</p><button class="street" data-act="dir"><span class="ic" data-i="pin"></span><span>5150 Buford Hwy NE C-120, Doraville, GA 30340</span>›</button><button class="find-it" data-act="guide"><span class="ic" data-i="walk"></span>Find it ›</button></div><div class="address-shortcuts"><button data-act="ride"><span class="ic" data-i="car"></span>Ride</button><button data-act="demo"><span class="ic" data-i="call"></span>Call</button></div></div>
+            <div class="pills"><button data-act="demo"><span class="ic" data-i="website"></span>Website</button><button data-act="dir"><span class="ic" data-i="map"></span>Map</button><button data-act="demo"><span class="ic" data-i="call"></span>Call</button><button data-act="reviews"><span class="ic" data-i="review"></span>Review</button></div>
           </div>
         </section>
 
         <section class="sec" id="sec-dishes">
-          <div class="sec-head"><h3>Signature dishes<em> · 4</em></h3><a class="all"><span class="half-only">View all</span><span class="full-only">All</span><span class="ic xs" data-i="chev"></span></a></div>
+          <div class="sec-head"><h3>Recommended by diners (6)</h3><a class="all" data-act="menu"><span class="half-only">View all</span><span class="full-only">View all</span><span class="ic xs" data-i="chev"></span></a></div>
           <div class="dish-row" id="dishRow"></div>
         </section>
 
-        <section class="sec" id="sec-combos">
-          <div class="sec-head"><h3>Popular combos<em> · 3</em></h3><a class="all"><span class="half-only">View all</span><span class="full-only">All</span><span class="ic xs" data-i="chev"></span></a></div>
+        <section class="sec full-only" id="sec-combos">
+          <div class="sec-head"><h3>Popular combos<em> · 3</em></h3><a class="all"><span class="half-only">View all</span><span class="full-only">View all</span><span class="ic xs" data-i="chev"></span></a></div>
           <div class="combo-row" id="comboRow"></div>
         </section>
 
-        <section class="sec full-only" id="sec-videos">
-          <div class="sec-head"><h3>Recent videos<em> · 98</em></h3><a class="all">All<span class="ic xs" data-i="chev"></span></a></div>
-          <div class="vgrid" id="vgrid"></div>
-        </section>
-
         <section class="sec" id="sec-reviews">
-          <div class="sec-head"><h3><span class="half-only">What people say</span><span class="full-only">Reviews<em> · 18</em></span></h3><a class="all"><span class="half-only">View all</span><span class="full-only">All</span><span class="ic xs" data-i="chev"></span></a></div>
+          <div class="sec-head"><h3><span class="half-only">What people say</span><span class="full-only">What people say</span></h3><a class="all"><span class="half-only">View all</span><span class="full-only">View all</span><span class="ic xs" data-i="chev"></span></a></div>
           <div class="reviews" id="reviews"></div>
-          <a class="view-all-bottom">View all<span class="ic xs" data-i="chev"></span></a>
+          <a class="view-all-bottom" data-act="demo">View all<span class="ic xs" data-i="chev"></span></a>
         </section>
+        <section class="sec full-only" id="sec-nearby"><div class="sec-head"><h3>You may also like</h3></div><div id="nearbyRows"></div><div id="nearbyLoading"><i class="spin"></i>Loading more nearby…</div></section>
+        <section id="dishesTab" hidden><p class="owner-label">From the owner · Updated 2 days ago</p><button class="owner-combo" data-act="combos"><img src="img/figma/bcff7.png" alt="Dinner combo"><div><span>COMBO</span><h2>Dinner for 2 · $46</h2><p>Dry pot + fish + 2 sides · save $12</p><b>See all combos ›</b></div></button><div id="dishesList"></div></section>
       </div>
     </div>
 
@@ -137,6 +130,8 @@
     </div>
   </section>
 
+<section class="screen" id="menu"><header class="menu-header"><button data-act="pop" aria-label="Back"><span class="ic" data-i="back"></span></button><b>Good Harvest · Menu</b></header><div class="menu-scroll"><div class="menu-sticky"><nav class="menu-tabs"><button data-page-tab="overview">Overview</button><button class="on" data-page-tab="dishes">Dishes</button><button data-page-tab="combos">Combos</button><button data-page-tab="reviews">Reviews</button><button data-act="demo">More</button></nav><nav class="category-chips" aria-label="Menu categories"></nav></div><div id="menuList"></div></div><div class="action-bar light"><button class="btn2" data-act="ride"><b>Get a ride</b><span>from $20 · Uber / Lyft</span></button><button class="btn1" data-act="dir"><b>Guide me there</b><span>18 min drive</span></button></div></section>
+<section class="screen" id="guide"><div class="guide-scroll"><img class="guide-hero" src="img/figma/ec583.png" alt="Good Harvest storefront"><div class="guide-nav"><button class="circ" data-act="pop" aria-label="Back"><span class="ic" data-i="back"></span></button><button class="circ" data-act="demo" aria-label="Share"><span class="ic" data-i="share"></span></button></div><article class="guide-content"><h1>Good Harvest</h1><button class="guide-address" data-act="dir">5150 Buford Hwy NE C-120, Doraville, GA 30340<span class="ic" data-i="pin"></span></button><nav class="guide-tabs"><button class="on" data-act="restaurant">Restaurant</button><button data-act="demo">Visitors</button><button data-act="demo">Report</button></nav><ol class="guide-steps"><li><span>1</span><p>Take Exit 32 (Chamblee Tucker Rd) off I-285, head toward Buford Hwy</p><img src="img/figma/278a5.png" alt="Exit 32"></li><li><span>2</span><p>Turn into the Asian Square plaza — look for the tall pylon sign on Buford Hwy</p><img src="img/figma/34341.png" alt="Asian Square plaza sign"></li><li><span>3</span><p>Good Harvest is at the far end, suite C-120, under the blue tile roof</p><img src="img/figma/ec583.png" alt="Good Harvest entrance"></li></ol></article></div></section>
   <!-- ============ Hand-off sheets ============ -->
   <div id="dim" data-act="closeSheet"></div>
 

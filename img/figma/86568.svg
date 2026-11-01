@@ -1,0 +1,11 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Icon/Call">
+<path id="Vector" d="M4.93333 1.93333C5.53333 1.6 6.26667 1.8 6.6 2.4L7.73333 4.4C8 4.93333 7.93333 5.53333 7.53333 5.93333L6.6 6.86667C7.26667 8.33333 8.46667 9.53333 9.93333 10.2L10.8667 9.26667C11.2667 8.86667 11.8667 8.8 12.4 9.06667L14.4 10.2C15 10.5333 15.2 11.2667 14.8667 11.8667L14.2667 12.9333C13.7333 13.8667 12.6667 14.2667 11.6667 14C7.26667 12.8667 3.6 9.2 2.46667 4.8C2.2 3.8 2.6 2.73333 3.53333 2.2L4.93333 1.93333Z" fill="url(#paint0_linear_0_140)"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_140" x1="8.70641" y1="1.77276" x2="8.70641" y2="14.0811" gradientUnits="userSpaceOnUse">
+<stop stop-color="#EA4359"/>
+<stop offset="1" stop-color="#EC9EEB"/>
+</linearGradient>
+</defs>
+</svg>
