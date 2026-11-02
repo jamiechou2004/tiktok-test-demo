@@ -4,13 +4,7 @@
   /* ---------------- icons (exported from Figma components) ---------------- */
   const G = (id, a, b) => `<linearGradient id="${id}" x1="12" y1="${a}" x2="12" y2="${b}" gradientUnits="userSpaceOnUse"><stop stop-color="#EA4359"/><stop offset="1" stop-color="#EC9EEB"/></linearGradient>`;
   const ICON = {
-    walk: `<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="Icon/Walk">
-<path id="Vector" d="M13.5 6.5C14.6046 6.5 15.5 5.60457 15.5 4.5C15.5 3.39543 14.6046 2.5 13.5 2.5C12.3954 2.5 11.5 3.39543 11.5 4.5C11.5 5.60457 12.3954 6.5 13.5 6.5Z" fill="#161823"/>
-<path id="Vector_2" d="M9 21L11 15.5M11 15.5L13.5 17.5V21M11 15.5L12 10M17 13.5L14.5 12.5L12 10L9 11.5V14.5" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" stroke="#161823"/>
-</g>
-</svg>
-`,
+    walk: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9 7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7"/></svg>',
     thumb: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M7 10v11H3V10h4zm2 0l4-8c1.5 0 2.5 1 2.5 2.5V9H20c1 0 2 1 1.8 2.2l-1.3 8C20.3 20.3 19.5 21 18.5 21H9V10z" stroke="#161823" stroke-width="2" stroke-linejoin="round"/></svg>',
     heart: '<svg width="18" height="18" viewBox="0 0 24 24" fill="#FE2C55"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.7 4.5c2 0 3.6 1.1 5.3 3 1.7-1.9 3.3-3 5.3-3 3.7 0 5.8 3.8 4.3 7.2C19.5 16.4 12 21 12 21z"/></svg>',
     phoneDark: '<svg width="20" height="20" viewBox="0 0 24 24" fill="#161823"><path d="M6.6 10.8a15 15 0 006.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 013 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>',

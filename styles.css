@@ -364,7 +364,7 @@ body.mouse #phone,body.mouse #phone *{cursor:none!important}
 .drive-wait{display:flex;align-items:center;gap:8px;width:100%;color:#2E8B8B;font-size:15px;line-height:20px;font-weight:500;white-space:nowrap}.drive-wait .vd{display:block;width:1px;height:14px;background:#D6D6D8;flex:none}.drive-wait .ic.sm{margin-left:auto}.drive-wait .pin{margin-right:-4px}.drive-wait .pin svg{width:16px;height:16px}.drive-wait .vd{margin-left:-4px}.drive-wait .ic svg path{stroke:#2E8B8B}
 .address-copy>p{font-size:13.5px;line-height:18px;color:var(--sub)}
 .street{display:flex;align-items:flex-start;gap:6px;font-size:13.5px;line-height:18px;width:100%;color:var(--sub);text-align:left}.street .txt{flex:1;min-width:0}.street .ic.sm{height:18px;align-items:center}
-.street svg{width:16px;height:16px}.find-it{display:flex;gap:4px;align-items:center;font-size:13px;line-height:18px;margin:0}
+.street svg{width:16px;height:16px}.find-it{display:flex;gap:6px;align-items:center;font-size:13px;line-height:18px;margin:0;color:#161823}.find-it .ic svg{width:16px;height:16px}
 .address-shortcuts{display:flex;gap:14px;align-items:flex-start;align-self:flex-start;padding-top:2px}
 .address-shortcuts button{display:flex;align-items:center;flex-direction:column;gap:4px;font-size:12px}
 .address-shortcuts .ic{width:40px;height:40px;background:#F1F1F2;border-radius:50%;align-items:center;justify-content:center}
