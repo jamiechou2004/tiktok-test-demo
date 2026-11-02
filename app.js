@@ -11,6 +11,7 @@
 </g>
 </svg>
 `,
+    thumb: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M7 10v11H3V10h4zm2 0l4-8c1.5 0 2.5 1 2.5 2.5V9H20c1 0 2 1 1.8 2.2l-1.3 8C20.3 20.3 19.5 21 18.5 21H9V10z" stroke="#161823" stroke-width="2" stroke-linejoin="round"/></svg>',
     heart: '<svg width="18" height="18" viewBox="0 0 24 24" fill="#FE2C55"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.7 4.5c2 0 3.6 1.1 5.3 3 1.7-1.9 3.3-3 5.3-3 3.7 0 5.8 3.8 4.3 7.2C19.5 16.4 12 21 12 21z"/></svg>',
     phoneDark: '<svg width="20" height="20" viewBox="0 0 24 24" fill="#161823"><path d="M6.6 10.8a15 15 0 006.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 013 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>',
     car: `<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -133,7 +134,7 @@
   // Compact recommendations; photo opens the existing video feed, text opens Menu.
   const recommendationNames = ['Dry Pot Lotus Root', 'Spicy Frog', 'Boiled Fish in Chili Oil', 'Garlic Pork Belly'];
   const recommendationPhotos = ['1e55b.png', 'a7cbf.png', '984b6.png', 'ae0c8.png'];
-  $('#dishRow').innerHTML = recommendationNames.map((name, i) => `<div class="dish"><button class="ph" data-photo="${i}" aria-label="Watch ${name}" style="background-image:url(img/figma/${recommendationPhotos[i]})"><span>TOP·${i+1}</span></button><button data-act="menu" class="dish-name">${name}</button><span>${[63,33,53,33][i]} recs</span></div>`).join('');
+  $('#dishRow').innerHTML = recommendationNames.map((name, i) => `<div class="dish"><button class="ph" data-photo="${i}" aria-label="Watch ${name}" style="background-image:url(img/figma/${recommendationPhotos[i]})"><span>TOP·${i+1}</span></button><button data-act="dishDetail" data-name="${name}" class="dish-name">${name}</button><span>${[63,33,53,33][i]} recs</span></div>`).join('');
   $('#comboRow').innerHTML = COMBOS.map(c => `
     <div class="combo">
       <div class="pics">${c.imgs.map(i => `<div style="background-image:url(${i})"></div>`).join('')}</div>
@@ -208,7 +209,7 @@
     syncChrome();
   }
   function syncChrome() {
-    const lightBg = ['place','menu','guide'].includes(S.screen) || !!S.sheet;
+    const lightBg = ['place','menu','guide','dish'].includes(S.screen) || !!S.sheet;
     $('#statusbar').classList.toggle('dark-text', S.screen === 'menu' || (S.screen === 'place' && place.classList.contains('dishes-mode')));
     $('#homeInd').classList.toggle('dark', lightBg);
   }
@@ -522,6 +523,8 @@
     collapse() { setMode('half'); },
     dishes() { navigateTab('dishes'); },
     menu() { openMenu(); }, guide() { pushPage('guide'); }, pop() { popPage(); },
+    dishDetail(el) { openDish(el.dataset.name); },
+    likeDish() { const b=$('.d-like'); const on=!b.classList.contains('on'); b.classList.toggle('on',on); const n=$('#dLikes'); const base=Number(n.dataset.base); n.textContent=(base+(on?1:0)).toLocaleString('en-US'); if(!reduce) b.animate([{transform:'scale(1)'},{transform:'scale(1.12)'},{transform:'scale(1)'}],{duration:260,easing:OUT}); },
     reviews() { navigateTab('reviews'); }, combos() { navigateTab('combos'); },
     demo() { hint('Not in this demo'); }, restaurant() { hint('Showing the restaurant’s guide'); },
     dfBack: closeFeed,
@@ -549,7 +552,7 @@
     const go = e.target.closest('[data-act="dir"],[data-act="ride"]');
     if (go) { openSheet(go.dataset.act, go); return; }
     const photo = e.target.closest('[data-photo]');
-    if(photo) { if(Number(photo.dataset.photo)===1) openFeed(photo); else hint('Not in this demo'); return; }
+    if(photo) { const nm=photo.getAttribute('aria-label').replace(/^Watch /,''); openDish(nm); return; }
     const dish = e.target.closest('[data-dish]');
     if (dish) { DISHES[dish.dataset.dish].feed ? openFeed(dish.querySelector('.ph')) : nudge(dish); return; }
     const vid = e.target.closest('[data-vid]');
@@ -557,7 +560,7 @@
     const like = e.target.closest('.act.like');
     if (like) { setLiked(like, !like.classList.contains('liked')); return; }
     const a = e.target.closest('[data-act]');
-    if (a && ACT[a.dataset.act]) { ACT[a.dataset.act](); return; }
+    if (a && ACT[a.dataset.act]) { ACT[a.dataset.act](a); return; }
     if(e.target.closest('button,a,.act,.head-actions .ic,.feed-top,.tabbar')) { hint('Not in this demo'); return; }
     if (S.screen === 'feed' && !S.busy) videoTap(e, $('#feed'));
     else if (S.screen === 'dishfeed') { const i = Math.round(df.scrollTop / 696); videoTap(e, $$('.df-item')[i]); }
@@ -606,7 +609,7 @@
   /* Final POI screens: shared rows, page history and six menu categories. */
   const MENU = {"Signature": [{"name": "Dry Pot Lotus Root", "price": "$18.95", "recs": 1861, "quote": "Crispy outside, tender inside, house secret spice", "img": "img/figma/5e87c.png", "tag": "Signature"}, {"name": "Spicy Frog", "price": "$22.95", "recs": 128, "quote": "Numbing-hot, fresh frog, stir-fried on high heat", "img": "img/figma/cd38e.png", "tag": "Signature"}, {"name": "Boiled Fish in Chili Oil", "price": "$32.95", "recs": 87, "quote": "Layered chili broth, fresh fish, made to order", "img": "img/figma/6e48f.png", "tag": "Signature"}, {"name": "Garlic Pork Belly", "price": "$12.95", "recs": 36, "quote": "Thin-sliced, garlic sauce, cold starter", "img": "img/figma/29847.png", "tag": "Signature"}, {"name": "Mapo Beef Rib", "price": "$24.95", "recs": 14, "quote": "Rich, beef rib, slow-braised", "img": "img/figma/fb44f.png", "tag": "Signature"}, {"name": "Cold Sesame Noodles", "price": "$9.95", "recs": 10, "quote": "Nutty, chewy, hand-pulled", "img": "img/figma/2a11a.png", "tag": "Signature"}], "Meat": [{"name": "Twice-Cooked Pork", "price": "$16.95", "tag": "Popular", "recs": 412, "quote": "Smoky, fatty-lean belly, leek", "img": "img/figma/56e03.png"}, {"name": "Peppercorn Duck", "price": "$21.95", "tag": "Spicy", "recs": 233, "quote": "Numbing Sichuan pepper, crispy skin", "img": "img/figma/93b8e.png"}, {"name": "Char Siu Beef", "price": "$19.95", "tag": "", "recs": 188, "quote": "Sweet glaze, sliced thin", "img": "img/figma/51ee4.png"}, {"name": "Braised Pigeon Legs", "price": "$15.95", "tag": "", "recs": 96, "quote": "Fall-off-the-bone, soy braise", "img": "img/figma/a1903.png"}, {"name": "Mushroom Duck Stew", "price": "$22.95", "tag": "", "recs": 74, "quote": "Slow-cooked, earthy broth", "img": "img/figma/8376c.png"}], "Veg": [{"name": "Dry Pot Lotus Root", "price": "$18.95", "tag": "Popular", "recs": 1861, "quote": "Crispy outside, tender inside", "img": "img/figma/2ad1d.png"}, {"name": "Garlic Edamame", "price": "$6.95", "tag": "", "recs": 305, "quote": "Salted, garlic, cold starter", "img": "img/figma/3b23f.png"}, {"name": "Celery & Lily Bulb Stir-fry", "price": "$10.95", "tag": "", "recs": 142, "quote": "Light, crunchy, not spicy", "img": "img/figma/0b961.png"}, {"name": "Mapo Tofu", "price": "$12.95", "tag": "Spicy", "recs": 527, "quote": "Silky tofu, chili bean paste", "img": "img/figma/8d056.png"}], "Dessert": [{"name": "Egg Tart", "price": "$5.95", "tag": "Popular", "recs": 388, "quote": "Flaky crust, warm custard", "img": "img/figma/1f671.png"}, {"name": "Sesame Bun", "price": "$6.95", "tag": "", "recs": 204, "quote": "Soft, black-sesame filling", "img": "img/figma/f332f.png"}, {"name": "Osmanthus Pastry", "price": "$5.95", "tag": "", "recs": 119, "quote": "Crumbly, floral, light sweet", "img": "img/figma/03e0f.png"}, {"name": "Bird's Nest Pudding", "price": "$8.95", "tag": "", "recs": 67, "quote": "Chilled, coconut milk", "img": "img/figma/8116f.png"}], "Snacks": [{"name": "Cold Sesame Noodles", "price": "$9.95", "tag": "Popular", "recs": 10, "quote": "Nutty, chewy, hand-pulled", "img": "img/figma/2c717.png"}, {"name": "Garlic Edamame", "price": "$6.95", "tag": "", "recs": 305, "quote": "Salted, garlic, cold starter", "img": "img/figma/3b23f.png"}, {"name": "Claypot Rice", "price": "$13.95", "tag": "", "recs": 156, "quote": "Crispy bottom, sausage", "img": "img/figma/b7455.png"}, {"name": "Garlic Crayfish (small)", "price": "$14.95", "tag": "Spicy", "recs": 221, "quote": "Shell-on, garlic butter", "img": "img/figma/21f33.png"}], "Soup": [{"name": "Yellow Croaker Soup", "price": "$18.95", "tag": "Popular", "recs": 173, "quote": "Milky broth, pickled veg", "img": "img/figma/6e48f.png"}, {"name": "Pickled Fish Soup", "price": "$19.95", "tag": "Spicy", "recs": 342, "quote": "Sour-hot, tender fish", "img": "img/figma/6e48f.png"}, {"name": "Stone Frog Soup", "price": "$22.95", "tag": "", "recs": 88, "quote": "Clear broth, ginger", "img": "img/figma/cd38e.png"}, {"name": "Crab & Tofu Soup", "price": "$16.95", "tag": "", "recs": 59, "quote": "Sweet crab, soft tofu", "img": "img/hotpot.jpg"}]};
   const pageStack=[]; let category='Signature';
-  const listMarkup=(items, menu=false)=>items.map((d,i)=>`<article class="menu-dish"><button class="menu-photo" data-photo="${d.name==='Spicy Frog'?1:0}" aria-label="Watch ${d.name}"><img src="${d.img}" alt="${d.name}"></button><button class="menu-dish-info" ${menu?'data-act="demo"':'data-act="menu"'}><div class="dish-title"><b>${d.name}</b><strong>${d.price}</strong></div><div class="dish-tags">${d.tag?`<span class="dish-tag ${d.tag==='Spicy'?'spicy':''}">${d.tag}</span>`:''}<span class="recommend ${d.recs>=100?'popular':''}">${d.recs} recommend</span></div><p>“${d.quote}”</p></button></article>`).join('');
+  const listMarkup=(items, menu=false)=>items.map((d,i)=>`<article class="menu-dish"><button class="menu-photo" data-photo="${d.name==='Spicy Frog'?1:0}" aria-label="Watch ${d.name}"><img src="${d.img}" alt="${d.name}"></button><button class="menu-dish-info" data-act="dishDetail" data-name="${d.name}"><div class="dish-title"><b>${d.name}</b><strong>${d.price}</strong></div><div class="dish-tags">${d.tag?`<span class="dish-tag ${d.tag==='Spicy'?'spicy':''}">${d.tag}</span>`:''}<span class="recommend ${d.recs>=100?'popular':''}">${d.recs} recommend</span></div><p>“${d.quote}”</p></button></article>`).join('');
   function showPlaceBody(dishes) {
     place.classList.toggle('dishes-mode',dishes);
     $('#dishesTab').hidden=!dishes;
@@ -645,6 +648,54 @@
     const bar=$('#dishesTab .chip-bar'),listTop=$('#dishesList').offsetTop-bar.offsetHeight;if(scroller.scrollTop>listTop)scroller.scrollTop=listTop;
     bar.querySelector(`[data-tabcat="${tabCategory}"]`).scrollIntoView({block:'nearest',inline:'nearest',behavior:reduce?'auto':'smooth'});});
   scroller.addEventListener('scroll',()=>{const bar=$('#dishesTab .chip-bar');if(bar)bar.classList.toggle('scrolled',place.classList.contains('dishes-mode')&&scroller.scrollTop>0);},{passive:true});
+
+  /* ---------- 07 · dish detail (one page per dish, data-driven) ---------- */
+  const REVIEWERS=[['Lil Nisa','img/figma/da16b.png'],['Eaternally Happy','img/figma/5c293.png'],['Vanesa Beltran','img/figma/dcbac.png'],['averysabile','img/a_avery.jpg'],['tray | chicago foodie','img/a_tray.jpg']];
+  const DETAIL={
+   'Dry Pot Lotus Root':{serves:'serves 2–3',chips:['Crispy outside','Numbing-spicy','House secret spice'],mentions:12,stars:5,who:0,date:'Sep 27, 2026',text:'The {dish} is black-pepper forward and really good — crispy edges, soaks up all the mala. We ordered it twice. Would come back for this alone… more',photos:4},
+   'Spicy Frog':{serves:'serves 2',chips:['Numbing-hot','Fresh frog','High-heat wok'],mentions:9,stars:5,who:4,date:'Jan 14, 2026',text:'Some of the best {dish} around. Tender, not bony, and the mala hits right without killing your tongue. My go-to here… more',photos:3},
+   'Boiled Fish in Chili Oil':{serves:'serves 2–3',chips:['Layered chili broth','Tender fish','Made to order'],mentions:8,stars:5,who:1,date:'Jun 21, 2026',text:'The {dish} came out bubbling. Fish is silky, broth has real depth — not just heat. Get rice. We ord… more',photos:4},
+   'Garlic Pork Belly':{serves:'serves 1–2',chips:['Thin-sliced','Garlic sauce','Cold starter'],mentions:5,stars:4,who:2,date:'Jun 12, 2026',text:'{dish} was a nice cold starter while we waited for the pots. Garlic is strong in a good way. 9/10 would order again',photos:2},
+   'Mapo Beef Rib':{serves:'serves 2',chips:['Slow-braised','Rich','Chili bean paste'],mentions:3,stars:5,who:3,date:'Oct 5, 2026',text:'Did not expect {dish} to be the star. Meat slides off the bone and the sauce is proper mapo. Dinner at Good Harvest in Doraville',photos:2},
+   'Cold Sesame Noodles':{serves:'serves 1',chips:['Nutty','Chewy','Hand-pulled'],mentions:2,stars:4,who:0,date:'Aug 3, 2026',text:'Light {dish} to balance out the spicy stuff. Chewy noodles, good sesame sauce, nothing fancy but solid',photos:1},
+   'Twice-Cooked Pork':{serves:'serves 2',chips:['Smoky','Fatty-lean belly','Leek'],mentions:14,stars:5,who:4,date:'Mar 2, 2026',text:'Classic {dish} done right — wok hei, crispy edges on the belly, leeks still have bite. One of the best versions in Atlanta… more',photos:3},
+   'Peppercorn Duck':{serves:'serves 2–3',chips:['Numbing Sichuan pepper','Crispy skin','Bone-in'],mentions:7,stars:5,who:1,date:'Jul 18, 2026',text:'{dish} is intense in the best way. Skin shatters, then the numbing kicks in. Not for mild eaters… more',photos:3},
+   'Char Siu Beef':{serves:'serves 2',chips:['Sweet glaze','Sliced thin','Cantonese-style'],mentions:6,stars:4,who:2,date:'May 9, 2026',text:'Tried the {dish} — sweet, sticky glaze, sliced thin. A good break from all the chili. Recommend',photos:2},
+   'Braised Pigeon Legs':{serves:'serves 1–2',chips:['Fall-off-the-bone','Soy braise','Dark meat'],mentions:4,stars:5,who:3,date:'Apr 22, 2026',text:'{dish} were a surprise. Deep soy flavor, meat falls right off. Order two if you’re sharing',photos:2},
+   'Mushroom Duck Stew':{serves:'serves 3–4',chips:['Slow-cooked','Earthy broth','Comfort food'],mentions:3,stars:4,who:0,date:'Feb 11, 2026',text:'Got the {dish} on a cold night. Earthy, rich broth and lots of duck. Big portion, easily fed three',photos:2},
+   'Garlic Edamame':{serves:'serves 2–3',chips:['Salted','Garlic','Cold starter'],mentions:10,stars:5,who:2,date:'Sep 1, 2026',text:'{dish} is the snack you keep eating while waiting. Garlicky, salty, addictive. Order it first',photos:1},
+   'Celery & Lily Bulb Stir-fry':{serves:'serves 2',chips:['Light','Crunchy','Not spicy'],mentions:4,stars:4,who:1,date:'Aug 30, 2026',text:'Needed something not spicy and the {dish} was perfect. Crunchy, clean, lightly seasoned',photos:2},
+   'Mapo Tofu':{serves:'serves 2',chips:['Silky tofu','Chili bean paste','Numbing'],mentions:16,stars:5,who:4,date:'Jun 6, 2026',text:'Real {dish} — silky tofu, fermented bean depth, numbing finish. Pour it over rice and you’re set… more',photos:3},
+   'Egg Tart':{serves:'1 piece',chips:['Flaky crust','Warm custard','Not too sweet'],mentions:11,stars:5,who:0,date:'Oct 12, 2026',text:'{dish} came warm, crust shatters, custard just wobbly. Had two. Perfect finish after the spice',photos:2},
+   'Sesame Bun':{serves:'2 pieces',chips:['Soft','Black-sesame filling','Steamed'],mentions:5,stars:4,who:3,date:'Sep 14, 2026',text:'{dish} — soft, warm, black-sesame center flows out. Sweet but not heavy',photos:2},
+   'Osmanthus Pastry':{serves:'3 pieces',chips:['Crumbly','Floral','Light sweet'],mentions:3,stars:4,who:2,date:'Jul 1, 2026',text:'Delicate {dish}, floral and barely sweet. Good with tea. Nice way to end the meal',photos:1},
+   "Bird's Nest Pudding":{serves:'serves 1',chips:['Chilled','Coconut milk','Light'],mentions:2,stars:4,who:1,date:'Aug 20, 2026',text:'Cold {dish} with coconut milk cooled everything down after the dry pot. Subtle, refreshing',photos:1},
+   'Claypot Rice':{serves:'serves 1–2',chips:['Crispy bottom','Chinese sausage','Comfort food'],mentions:6,stars:5,who:4,date:'Nov 20, 2025',text:'{dish} with the crispy scorched layer at the bottom — that’s the whole point and they nail it. Sausage is smoky',photos:3},
+   'Garlic Crayfish (small)':{serves:'serves 2',chips:['Shell-on','Garlic butter','Messy, worth it'],mentions:8,stars:5,who:0,date:'Jul 25, 2026',text:'{dish}: shell-on, drowning in garlic butter. Messy, bring wipes, totally worth it… more',photos:3},
+   'Yellow Croaker Soup':{serves:'serves 2–3',chips:['Milky broth','Pickled veg','Whole fish'],mentions:5,stars:5,who:1,date:'Mar 29, 2026',text:'{dish} has that milky, slow-simmered broth. Pickled veg cuts through. Very homey',photos:2},
+   'Pickled Fish Soup':{serves:'serves 2–3',chips:['Sour-hot','Tender fish','Pickled mustard'],mentions:9,stars:5,who:4,date:'Apr 8, 2026',text:'The {dish} is sour, hot and addictive. Fish is tender and there’s a lot of it. Better than most suan cai yu in town… more',photos:3},
+   'Stone Frog Soup':{serves:'serves 2',chips:['Clear broth','Ginger','Light'],mentions:2,stars:4,who:2,date:'Feb 26, 2026',text:'{dish} is clean and gingery — a nice reset between the spicy dishes. Frog is tender',photos:1},
+   'Crab & Tofu Soup':{serves:'serves 2',chips:['Sweet crab','Soft tofu','Mild'],mentions:3,stars:4,who:3,date:'Jan 30, 2026',text:'Mild {dish}, sweet crab flavor comes through, soft tofu. Good for kids or anyone avoiding chili',photos:2}
+  };
+  const ALL_DISHES=Object.values(MENU).flat();
+  const findDish=n=>ALL_DISHES.find(d=>d.name===n);
+  const heroOf=img=>'img/hero/'+img.split('/').pop().replace(/\.\w+$/,'')+'.jpg';
+  function openDish(name){
+    const d=findDish(name); if(!d) return hint('Not in this demo');
+    const x=DETAIL[name]||{serves:'serves 2',chips:d.quote.split(', ').slice(0,3),mentions:3,stars:4,who:0,date:'Sep 2026',text:'Liked the {dish}. '+d.quote+'.',photos:2};
+    $('#dishHero').src=heroOf(d.img); $('#dName').textContent=name;
+    const tag=$('#dTag'); tag.textContent=d.tag||''; tag.className='dish-tag'+(d.tag==='Spicy'?' spicy':'');
+    $('#dPrice').textContent=d.price; $('#dServes').textContent='· '+x.serves;
+    const lk=$('#dLikes'); lk.dataset.base=d.recs; lk.textContent=d.recs.toLocaleString('en-US'); $('.d-like').classList.remove('on');
+    $('#dChips').innerHTML=x.chips.map(c=>`<span>${c}</span>`).join('');
+    $('#dMentions').textContent=x.mentions+' mention this dish';
+    const [who,av]=REVIEWERS[x.who];
+    const others=ALL_DISHES.filter(o=>o.name!==name).map(o=>heroOf(o.img));
+    const seed=name.length; const pics=Array.from({length:Math.min(3,x.photos)},(_,i)=>others[(seed*3+i*5)%others.length]);
+    $('#dReview').innerHTML=`<div class="rv-head"><img src="${av}" alt=""><div><div class="rv-name">${who}</div>${stars(x.stars)}</div><span class="rv-date">${x.date}</span></div><p class="rv-text">${x.text.replace('{dish}',`<mark>${name}</mark>`)}</p>${pics.length?`<div class="d-photos">${pics.map((p,i)=>`<div style="background-image:url(${p})">${i===pics.length-1&&x.photos>pics.length?`<span class="more">${x.photos} photos${ICON.chev}</span>`:''}</div>`).join('')}</div>`:''}`;
+    $('#dish .view-all-bottom').firstChild.textContent=`See all ${x.mentions} reviews`;
+    pushPage('dish'); $('.dish-scroll').scrollTop=0; paintIcons($('#dish'));
+  }
   function openMenu() { category='Signature'; renderCategory(); pushPage('menu'); $('.menu-scroll').scrollTop=0; }
   function renderCategory() {
     $('.category-chips').innerHTML=Object.keys(MENU).map(c=>`<button data-category="${c}" class="${c===category?'on':''}" aria-pressed="${c===category}">${c}</button>`).join('');
