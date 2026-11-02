@@ -470,3 +470,5 @@ body.mouse #phone,body.mouse #phone *{cursor:none!important}
 .ci-state small{font-size:13px;font-weight:500;color:#8A8B91}
 .ci-pin svg{animation:ciBob 1s ease-in-out infinite}
 @keyframes ciBob{50%{transform:translateY(-3px)}}
+
+.rec,.recommend{display:inline-flex;align-items:center;gap:3px}.rthumb{flex:none}
