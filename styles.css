@@ -361,9 +361,9 @@ body.mouse #phone,body.mouse #phone *{cursor:none!important}
 .rating-line{justify-content:space-between;margin:10px 0 12px;padding-bottom:12px;border-bottom:1px solid #E3E3E4;font-size:16px;line-height:21px;white-space:nowrap}.rating-line .rt{gap:4px}.rating-line .rt b{font-weight:600}.rating-line svg{width:18px;height:18px}
 .rating-line button{font-size:13.5px;line-height:18px}.rating-line em{font-weight:500}.rating-line em{font-style:normal;color:#0BB07B}
 .address-actions{display:flex;gap:10px}.address-copy{min-width:0;flex:1;display:flex;flex-direction:column;gap:6px}
-.drive-wait{display:flex;align-items:center;gap:8px;width:100%;color:#2E8B8B;font-size:15px;line-height:20px;font-weight:500;white-space:nowrap}.drive-wait i{display:block;width:1px;height:14px;background:#D6D6D8}.drive-wait .ic{margin-left:auto}.drive-wait .ic svg path{stroke:#2E8B8B}
+.drive-wait{display:flex;align-items:center;gap:8px;width:100%;color:#2E8B8B;font-size:15px;line-height:20px;font-weight:500;white-space:nowrap}.drive-wait .vd{display:block;width:1px;height:14px;background:#D6D6D8;flex:none}.drive-wait .ic.sm{margin-left:auto}.drive-wait .pin{margin-right:-4px}.drive-wait .pin svg{width:16px;height:16px}.drive-wait .vd{margin-left:-4px}.drive-wait .ic svg path{stroke:#2E8B8B}
 .address-copy>p{font-size:13.5px;line-height:18px;color:var(--sub)}
-.street{display:flex;align-items:flex-start;gap:6px;font-size:13.5px;line-height:18px;width:100%}.street .txt{flex:1;min-width:0}.street .ic.sm{height:18px;align-items:center}
+.street{display:flex;align-items:flex-start;gap:6px;font-size:13.5px;line-height:18px;width:100%;color:var(--sub);text-align:left}.street .txt{flex:1;min-width:0}.street .ic.sm{height:18px;align-items:center}
 .street svg{width:16px;height:16px}.find-it{display:flex;gap:4px;align-items:center;font-size:13px;line-height:18px;margin:0}
 .address-shortcuts{display:flex;gap:14px;align-items:flex-start;align-self:flex-start;padding-top:2px}
 .address-shortcuts button{display:flex;align-items:center;flex-direction:column;gap:4px;font-size:12px}
