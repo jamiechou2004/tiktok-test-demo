@@ -642,7 +642,7 @@
     $('#menuList').animate([{opacity:0},{opacity:1}],{duration:D(180)});
   }
   $('.category-chips').addEventListener('click',e=>{const b=e.target.closest('[data-category]');if(!b)return;category=b.dataset.category;renderCategory();$('.menu-scroll').scrollTop=0;$(`[data-category="${category}"]`).scrollIntoView({block:'nearest',inline:'nearest',behavior:reduce?'auto':'smooth'});});
-  $('.menu-tabs').addEventListener('click',e=>{const b=e.target.closest('[data-page-tab]');if(b)navigateTab(b.dataset.pageTab);});
+  // main section tabs removed from the menu page (Figma 6b): header shows back + 'Dishes' only
   $('.menu-scroll').addEventListener('scroll',()=>$('.menu-sticky').classList.toggle('scrolled',$('.menu-scroll').scrollTop>0),{passive:true});
   const NEARBY=[['Masterpiece','Sichuan · Duluth · $$','4.6 (812)','6.2 mi','Also does dry pot','f4a8d.png'],["Gu’s Kitchen",'Sichuan · Chamblee · $$','4.4 (355)','2.3 mi','Closer · open now','a7c8c.png'],['Chong Qing Hot Pot','Hot pot · Duluth · $$$','4.5 (240)','7.8 mi','Group-friendly','09f0c.png'],['Tasty China II','Sichuan · Norcross · $$','4.3 (510)','8.9 mi','Famous for whole fish','984b6.png'],['Northern China Eatery','Dongbei · Doraville · $','4.5 (1200)','0.4 mi','Walkable · dumplings','09bf9.png'],['Bo Bo Garden','Cantonese · Doraville · $$','4.4 (430)','0.9 mi','Late night','f0bfd.png']];
   let nearbyCount=0,loading=false;
