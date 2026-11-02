@@ -337,7 +337,7 @@
   scroller.addEventListener('scroll', () => {
     if (S.mode !== 'full' || place.classList.contains('dishes-mode') || Date.now() < spyLock) return;
     let cur='overview'; const y=scroller.scrollTop+60;
-    ['combos','reviews','nearby'].forEach(id=>{if($('#sec-'+id).offsetTop<=y) cur=id==='nearby'?'more':id;});
+    ['dishes','combos','reviews','nearby'].forEach(id=>{if($('#sec-'+id).offsetTop<=y) cur=id==='nearby'?'more':id;});
     setTab(cur);
   }, {passive:true});
 
