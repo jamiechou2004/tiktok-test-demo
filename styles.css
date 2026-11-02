@@ -416,3 +416,10 @@ body.mouse #phone,body.mouse #phone *{cursor:none!important}
 #place:not(.full) .sheet-scroll{padding-top:8px}
 #place:not(.full) .grabber{margin-bottom:20px}
 .name span .full-only{display:none}#place.full .name span .half-only{display:none}#place.full .name span .full-only{display:inline}
+
+/* Dishes tab (6a): category sub-nav sticks right under the main tabs */
+.chip-bar{display:flex;gap:8px;overflow-x:auto;padding:10px 16px;scrollbar-width:none}.chip-bar::-webkit-scrollbar{display:none}
+.chip-bar button{flex:none;padding:8px 15px;border-radius:24px;background:#F1F1F2;font-size:14px;white-space:nowrap;transition:background .18s,color .18s}
+.chip-bar .on{background:#161823;color:#fff;font-weight:600}
+.tab-chips{position:sticky;top:0;z-index:3;background:#fff;border-bottom:1px solid #F0F0F2;touch-action:pan-x}
+.tab-chips.scrolled{box-shadow:0 2px 6px #0000000f}
