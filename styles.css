@@ -21,9 +21,9 @@ img{display:block}
 .spacer{display:block;width:32px;height:32px;flex:none}
 
 /* status bar + home indicator */
-.statusbar{position:absolute;top:0;left:0;width:390px;height:47px;z-index:80;display:flex;align-items:center;justify-content:space-between;padding:4px 26px 0 42px;color:#fff;pointer-events:none;transition:color .2s}
-.statusbar .time{font-size:17px;font-weight:600;letter-spacing:-.2px;width:54px;text-align:center}
-.statusbar .sb-right{display:flex;gap:6px;align-items:center}
+.statusbar{position:absolute;top:0;left:0;width:390px;height:47px;z-index:80;color:#fff;pointer-events:none;transition:color .2s}
+.statusbar .time{position:absolute;left:24px;top:14px;width:94px;height:22px;line-height:22px;text-align:center;font-family:-apple-system,'SF Pro Text',system-ui,sans-serif;font-size:17px;font-weight:600;letter-spacing:0}
+.statusbar .sb-levels{position:absolute;left:272px;top:14px;display:block}
 .home-ind{position:absolute;left:128px;bottom:8px;width:134px;height:5px;border-radius:3px;background:#fff;z-index:80;pointer-events:none;transition:background .2s}
 .home-ind.dark{background:#000}
 
@@ -404,7 +404,7 @@ body.mouse #phone,body.mouse #phone *{cursor:none!important}
 .guide-steps{list-style:none;margin-top:20px}.guide-steps li{position:relative;padding-left:32px;margin-bottom:16px}.guide-steps li>span{position:absolute;left:0;top:0;background:#FE2C55;color:white;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700}.guide-steps li:not(:last-child):before{content:'';position:absolute;left:10px;top:28px;bottom:-10px;width:2px;background:#E6E6E8}.guide-steps p{font-size:16px;line-height:20px;min-height:40px;margin-bottom:10px}.guide-steps img{width:326px;height:214px;object-fit:cover;border-radius:12px}
 .nearby-row{display:flex;align-items:center;gap:12px;padding:14px 0;width:100%;border-bottom:1px solid #F1F1F2}.nearby-row>img{width:72px;height:72px;border-radius:10px;object-fit:cover}.nearby-row>div{flex:1;min-width:0}.nearby-row b{font-size:16px;font-weight:600}.nearby-row p{font-size:12px;color:#8A8B91;line-height:18px}.nearby-row small{display:inline-block;background:#F1F1F2;border-radius:4px;padding:2px 5px;font-size:11px;color:#5E5F66}.nearby-row>span{color:#8A8B91}.red-star{color:#FE2C55}
 #nearbyLoading{font-size:12px;color:#8A8B91;display:flex;justify-content:center;align-items:center;gap:8px;padding:20px 0}#nearbyLoading .spin{border-color:#E6E6E8;border-top-color:#8A8B91}
-.statusbar.dark-text{color:#161823}.statusbar.dark-text .sb-right{filter:invert(1)}
+.statusbar.dark-text{color:#000}
 .screen:not(.on){pointer-events:none}.screen.on{pointer-events:auto}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.category-chips button{transition:none}}
 .stats-capsule b{display:flex;align-items:center;gap:3px}.stats-capsule .heart svg{width:18px;height:18px}.nearby-row p svg{width:12px;height:12px;display:inline;vertical-align:-2px}
