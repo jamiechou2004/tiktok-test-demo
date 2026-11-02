@@ -474,3 +474,4 @@ body.mouse #phone,body.mouse #phone *{cursor:none!important}
 .rec,.recommend{display:inline-flex;align-items:center;gap:3px}.rthumb{flex:none}
 
 button,a{-webkit-tap-highlight-color:transparent}button:focus,a:focus{outline:none}button:focus-visible{outline:2px solid #FE2C55;outline-offset:2px}
+.stats-capsule b.big{font-size:18px;line-height:23px;font-weight:700}.name .open{font-style:normal;color:#0BB07B;font-weight:500}
