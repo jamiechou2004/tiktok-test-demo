@@ -443,3 +443,6 @@ body.mouse #phone,body.mouse #phone *{cursor:none!important}
 .d-photos{display:flex;gap:6px}.d-photos div{position:relative;width:104px;height:104px;border-radius:8px;background-size:cover;background-position:center;overflow:hidden}
 .d-photos .more{position:absolute;right:6px;bottom:6px;display:flex;align-items:center;gap:2px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;font-weight:500;border-radius:6px;padding:4px 8px}.d-photos .more svg{width:12px;height:12px}.d-photos .more svg path{stroke:#fff}
 #dish .view-all-bottom{margin-top:2px;font-size:13px;font-weight:500}
+
+.menu-sec-title{font-size:18px;line-height:24px;font-weight:700;padding:20px 16px 8px}
+#menuList .menu-sec:first-child .menu-sec-title{padding-top:12px}

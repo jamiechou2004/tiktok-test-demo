@@ -613,7 +613,7 @@
   function showPlaceBody(dishes) {
     place.classList.toggle('dishes-mode',dishes);
     $('#dishesTab').hidden=!dishes;
-    if(dishes) renderTabCategory(false);
+    if(dishes&&!$('#dishesList').children.length) renderTabCategory();
     syncChrome();
   }
   function navigateTab(tab) {
@@ -638,16 +638,6 @@
     await anim(el,reduce?[{opacity:1},{opacity:0}]:[{transform:'translateX(0)'},{transform:'translateX(100%)'}],{duration:320,easing:IOS});
     show(prev.screen); el.getAnimations().forEach(a=>a.cancel());scroller.scrollTop=prev.top;S.busy=false;
   }
-  let tabCategory='Signature';
-  function renderTabCategory(animate=true) {
-    $('#dishesTab .chip-bar').innerHTML=Object.keys(MENU).map(c=>`<button data-tabcat="${c}" class="${c===tabCategory?'on':''}" aria-pressed="${c===tabCategory}">${c}</button>`).join('');
-    $('#dishesList').innerHTML=listMarkup(MENU[tabCategory]);
-    if(animate) $('#dishesList').animate([{opacity:0},{opacity:1}],{duration:D(180)});
-  }
-  $('#dishesTab .chip-bar').addEventListener('click',e=>{const b=e.target.closest('[data-tabcat]');if(!b)return;tabCategory=b.dataset.tabcat;renderTabCategory();
-    const bar=$('#dishesTab .chip-bar'),listTop=$('#dishesList').offsetTop-bar.offsetHeight;if(scroller.scrollTop>listTop)scroller.scrollTop=listTop;
-    bar.querySelector(`[data-tabcat="${tabCategory}"]`).scrollIntoView({block:'nearest',inline:'nearest',behavior:reduce?'auto':'smooth'});});
-  scroller.addEventListener('scroll',()=>{const bar=$('#dishesTab .chip-bar');if(bar)bar.classList.toggle('scrolled',place.classList.contains('dishes-mode')&&scroller.scrollTop>0);},{passive:true});
 
   /* ---------- 07 · dish detail (one page per dish, data-driven) ---------- */
   const REVIEWERS=[['Lil Nisa','img/figma/da16b.png'],['Eaternally Happy','img/figma/5c293.png'],['Vanesa Beltran','img/figma/dcbac.png'],['averysabile','img/a_avery.jpg'],['tray | chicago foodie','img/a_tray.jpg']];
@@ -696,15 +686,36 @@
     $('#dish .view-all-bottom').firstChild.textContent=`See all ${x.mentions} reviews`;
     pushPage('dish'); $('.dish-scroll').scrollTop=0; paintIcons($('#dish'));
   }
-  function openMenu() { category='Signature'; renderCategory(); pushPage('menu'); $('.menu-scroll').scrollTop=0; }
-  function renderCategory() {
-    $('.category-chips').innerHTML=Object.keys(MENU).map(c=>`<button data-category="${c}" class="${c===category?'on':''}" aria-pressed="${c===category}">${c}</button>`).join('');
-    $('#menuList').innerHTML=listMarkup(MENU[category],true);
-    $('#menuList').animate([{opacity:0},{opacity:1}],{duration:D(180)});
+  /* ---------- one-page menu: chips are anchors, sections stack (Figma 6b one page) ---------- */
+  const CATS=Object.keys(MENU);
+  const seenDish=new Set();
+  const SECTIONS=CATS.map(c=>({cat:c,items:MENU[c].filter(d=>{if(c!=='Signature'&&seenDish.has(d.name))return false;seenDish.add(d.name);return true;})}));
+  const sectionsMarkup=prefix=>SECTIONS.map(s=>`<section class="menu-sec" id="${prefix}-${s.cat}" data-cat="${s.cat}"><h2 class="menu-sec-title">${s.cat}</h2>${listMarkup(s.items,true)}</section>`).join('');
+  const chipsMarkup=(attr,active)=>CATS.map(c=>`<button ${attr}="${c}" class="${c===active?'on':''}" aria-pressed="${c===active}">${c}</button>`).join('');
+  function setChip(bar,attr,cat){bar.querySelectorAll('button').forEach(b=>{const on=b.getAttribute(attr)===cat;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);});const el=bar.querySelector(`[${attr}="${cat}"]`);if(el)el.scrollIntoView({block:'nearest',inline:'nearest',behavior:reduce?'auto':'smooth'});}
+  // generic: wire a chip bar + scroller + section prefix
+  function anchorMenu({bar,attr,scrollEl,prefix,stickyH}){
+    let lock=0;
+    bar.addEventListener('click',e=>{const b=e.target.closest(`[${attr}]`);if(!b)return;const cat=b.getAttribute(attr);const sec=$('#'+prefix+'-'+cat);if(!sec)return;lock=Date.now()+700;setChip(bar,attr,cat);
+      scrollEl.scrollTo({top:sec.offsetTop-stickyH(),behavior:reduce?'auto':'smooth'});});
+    scrollEl.addEventListener('scroll',()=>{if(Date.now()<lock||(scrollEl===scroller&&!place.classList.contains('dishes-mode')))return;const y=scrollEl.scrollTop+stickyH()+8;let cur=CATS[0];$$('.menu-sec',scrollEl).forEach(sec=>{if(sec.offsetTop<=y)cur=sec.dataset.cat;});if(scrollEl.scrollTop+scrollEl.clientHeight>=scrollEl.scrollHeight-4)cur=CATS[CATS.length-1];if(!bar.querySelector('.on')||bar.querySelector('.on').getAttribute(attr)!==cur)setChip(bar,attr,cur);},{passive:true});
   }
-  $('.category-chips').addEventListener('click',e=>{const b=e.target.closest('[data-category]');if(!b)return;category=b.dataset.category;renderCategory();$('.menu-scroll').scrollTop=0;$(`.category-chips [data-category="${category}"]`).scrollIntoView({block:'nearest',inline:'nearest',behavior:reduce?'auto':'smooth'});});
-  // main section tabs removed from the menu page (Figma 6b): header shows back + 'Dishes' only
+  // 6b · pushed menu page
+
+  $('.category-chips').innerHTML=chipsMarkup('data-category','Signature');
+  $('#menuList').innerHTML=sectionsMarkup('m');
+  function openMenu(cat='Signature') { pushPage('menu'); const sec=$('#m-'+cat); $('.menu-scroll').scrollTop=sec?Math.max(0,sec.offsetTop-$('.menu-sticky').offsetHeight):0; setChip($('.category-chips'),'data-category',cat); }
+  anchorMenu({bar:$('.category-chips'),attr:'data-category',scrollEl:$('.menu-scroll'),prefix:'m',stickyH:()=>$('.menu-sticky').offsetHeight});
   $('.menu-scroll').addEventListener('scroll',()=>$('.menu-sticky').classList.toggle('scrolled',$('.menu-scroll').scrollTop>0),{passive:true});
+  // 6a · Dishes tab inside the POI sheet
+  function renderTabCategory() {
+    $('#dishesTab .chip-bar').innerHTML=chipsMarkup('data-tabcat','Signature');
+    $('#dishesList').innerHTML=sectionsMarkup('t');
+  }
+  anchorMenu({bar:$('#dishesTab .chip-bar'),attr:'data-tabcat',scrollEl:scroller,prefix:'t',stickyH:()=>$('#dishesTab .chip-bar').offsetHeight});
+  scroller.addEventListener('scroll',()=>{const bar=$('#dishesTab .chip-bar');if(bar)bar.classList.toggle('scrolled',place.classList.contains('dishes-mode')&&scroller.scrollTop>0);},{passive:true});
+
+  /* ---------- 07 · dish detail (one page per dish, data-driven) ---------- */
   const NEARBY=[['Masterpiece','Sichuan · Duluth · $$','4.6 (812)','6.2 mi','Also does dry pot','f4a8d.png'],["Gu’s Kitchen",'Sichuan · Chamblee · $$','4.4 (355)','2.3 mi','Closer · open now','a7c8c.png'],['Chong Qing Hot Pot','Hot pot · Duluth · $$$','4.5 (240)','7.8 mi','Group-friendly','09f0c.png'],['Tasty China II','Sichuan · Norcross · $$','4.3 (510)','8.9 mi','Famous for whole fish','984b6.png'],['Northern China Eatery','Dongbei · Doraville · $','4.5 (1200)','0.4 mi','Walkable · dumplings','09bf9.png'],['Bo Bo Garden','Cantonese · Doraville · $$','4.4 (430)','0.9 mi','Late night','f0bfd.png']];
   let nearbyCount=0,loading=false;
   function addNearby(n){for(let i=0;i<n;i++){const d=NEARBY[nearbyCount++%NEARBY.length];$('#nearbyRows').insertAdjacentHTML('beforeend',`<button class="nearby-row" data-act="demo"><img src="img/figma/${d[5]}" alt="${d[0]}"><div><b>${d[0]}</b><p>${d[1]}</p><p>${ICON.star} ${d[2]} · ${d[3]}</p><small>${d[4]}</small></div><span>›</span></button>`);}}
