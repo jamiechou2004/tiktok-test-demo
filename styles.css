@@ -446,3 +446,27 @@ body.mouse #phone,body.mouse #phone *{cursor:none!important}
 
 .menu-sec-title{font-size:18px;line-height:24px;font-weight:700;padding:20px 16px 8px}
 #menuList .menu-sec:first-child .menu-sec-title{padding-top:12px}
+
+/* recommend check-in sheet */
+.ci-scrim{position:absolute;inset:0;background:rgba(0,0,0,.45);z-index:40;opacity:0;transition:opacity .2s}
+.ci-scrim.on{opacity:1}
+.ci-sheet{position:absolute;left:0;right:0;bottom:0;z-index:41;background:#fff;border-radius:24px 24px 0 0;padding:24px 24px 44px;transform:translateY(100%);transition:transform .28s cubic-bezier(.2,.8,.2,1)}
+.ci-sheet.on{transform:none}
+.ci-x{position:absolute;right:20px;top:20px;width:28px;height:28px;display:grid;place-items:center}
+.ci-state{display:none;flex-direction:column;align-items:center;text-align:center;gap:14px;padding-top:24px}
+.ci-sheet[data-s="checking"] .ci-state[data-s="checking"],.ci-sheet[data-s="far"] .ci-state[data-s="far"],.ci-sheet[data-s="ok"] .ci-state[data-s="ok"],.ci-sheet[data-s="max"] .ci-state[data-s="max"]{display:flex}
+.ci-row{display:flex;align-items:center;gap:10px}
+.ci-state h2{font-size:24px;font-weight:700;color:#161823;margin:0}
+.ci-state[data-s="checking"] h2{font-weight:600}
+.ci-state p{font-size:15px;line-height:21px;color:#5C5C66;margin:0;max-width:330px}
+.ci-badge{width:56px;height:56px;border-radius:28px;display:grid;place-items:center}
+.ci-badge.tint{background:#FFE9EE}.ci-badge.red{background:#FE2C55}
+.ci-badge .ic svg{width:28px;height:28px}
+.ci-badge.tint .ic svg path{stroke:#FE2C55}
+.ci-btn{width:100%;height:50px;border-radius:25px;font-size:16px;font-weight:600}
+.ci-btn.red{background:#FE2C55;color:#fff;margin-top:8px}.ci-btn.grey{background:#F1F1F2;color:#161823}
+.ci-sim{font-size:12px;color:#8A8B91;text-decoration:underline;padding:4px}
+.ci-dots{display:flex;gap:8px}.ci-dots i{width:32px;height:6px;border-radius:3px;background:#E3E3E4}.ci-dots i.on{background:#FE2C55}
+.ci-state small{font-size:13px;font-weight:500;color:#8A8B91}
+.ci-pin svg{animation:ciBob 1s ease-in-out infinite}
+@keyframes ciBob{50%{transform:translateY(-3px)}}

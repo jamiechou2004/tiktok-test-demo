@@ -518,7 +518,8 @@
     dishes() { navigateTab('dishes'); },
     menu() { openMenu(); }, guide() { pushPage('guide'); }, pop() { popPage(); },
     dishDetail(el) { openDish(el.dataset.name); },
-    likeDish() { const b=$('.d-like'); const on=!b.classList.contains('on'); b.classList.toggle('on',on); const n=$('#dLikes'); const base=Number(n.dataset.base); n.textContent=(base+(on?1:0)).toLocaleString('en-US'); if(!reduce) b.animate([{transform:'scale(1)'},{transform:'scale(1.12)'},{transform:'scale(1)'}],{duration:260,easing:OUT}); },
+    likeDish() { const b=$('.d-like'); if(b.classList.contains('on')){ b.classList.remove('on'); ciUsed=Math.max(0,ciUsed-1); const n=$('#dLikes'); n.textContent=Number(n.dataset.base).toLocaleString('en-US'); hint('Recommendation removed'); return; } ciOpen(); },
+    ciClose() { ciHide(); }, ciSave() { ciHide(); hint('Saved to Want to try'); }, ciSim() { ciHere=true; ciRun(); },
     reviews() { navigateTab('reviews'); }, combos() { navigateTab('combos'); },
     demo() { hint('Not in this demo'); }, restaurant() { hint('Showing the restaurant’s guide'); },
     dfBack: closeFeed,
@@ -663,6 +664,13 @@
   };
   const ALL_DISHES=Object.values(MENU).flat();
   const findDish=n=>ALL_DISHES.find(d=>d.name===n);
+
+  // ---- recommend check-in ----
+  let ciHere=new URLSearchParams(location.search).has('here'), ciUsed=0, ciTimer;
+  function ciSet(s){ $('#ciSheet').dataset.s=s; }
+  function ciOpen(){ const sc=$('#ciScrim'), sh=$('#ciSheet'); sc.hidden=false; sh.hidden=false; requestAnimationFrame(()=>{sc.classList.add('on'); sh.classList.add('on');}); ciRun(); }
+  function ciRun(){ ciSet('checking'); clearTimeout(ciTimer); ciTimer=setTimeout(()=>{ if(!ciHere) return ciSet('far'); if(ciUsed>=3) return ciSet('max'); ciUsed++; const b=$('.d-like'); b.classList.add('on'); const n=$('#dLikes'); n.textContent=(Number(n.dataset.base)+1).toLocaleString('en-US'); $$('.ci-dots i').forEach((d,i)=>d.classList.toggle('on',i<ciUsed)); $('#ciCount').textContent=ciUsed+' of 3 for this visit'; ciSet('ok'); if(!reduce) b.animate([{transform:'scale(1)'},{transform:'scale(1.18)'},{transform:'scale(1)'}],{duration:260}); }, reduce?200:1200); }
+  function ciHide(){ clearTimeout(ciTimer); const sc=$('#ciScrim'), sh=$('#ciSheet'); sc.classList.remove('on'); sh.classList.remove('on'); setTimeout(()=>{sc.hidden=true; sh.hidden=true;},280); }
   const heroOf=img=>'img/hero/'+img.split('/').pop().replace(/\.\w+$/,'')+'.jpg';
   function openDish(name){
     const d=findDish(name); if(!d) return hint('Not in this demo');
