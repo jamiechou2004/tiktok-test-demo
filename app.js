@@ -519,7 +519,7 @@
     menu() { openMenu(); }, guide() { pushPage('guide'); }, pop() { popPage(); },
     dishDetail(el) { openDish(el.dataset.name); },
     likeDish() { const b=$('.d-like'); if(b.classList.contains('on')){ b.classList.remove('on'); ciUsed=Math.max(0,ciUsed-1); const n=$('#dLikes'); n.textContent=Number(n.dataset.base).toLocaleString('en-US'); hint('Recommendation removed'); return; } ciOpen(); },
-    ciClose() { ciHide(); }, ciSave() { ciHide(); hint('Saved to Want to try'); }, ciSim() { ciHere=true; ciRun(); },
+    ciClose() { ciHide(); }, ciSave() { ciHide(); hint('Saved to Want to try'); },
     reviews() { navigateTab('reviews'); }, combos() { navigateTab('combos'); },
     demo() { hint('Not in this demo'); }, restaurant() { hint('Showing the restaurant’s guide'); },
     dfBack: closeFeed,
@@ -671,6 +671,10 @@
   function ciOpen(){ const sc=$('#ciScrim'), sh=$('#ciSheet'); sc.hidden=false; sh.hidden=false; requestAnimationFrame(()=>{sc.classList.add('on'); sh.classList.add('on');}); ciRun(); }
   function ciRun(){ ciSet('checking'); clearTimeout(ciTimer); ciTimer=setTimeout(()=>{ if(!ciHere) return ciSet('far'); if(ciUsed>=3) return ciSet('max'); ciUsed++; const b=$('.d-like'); b.classList.add('on'); const n=$('#dLikes'); n.textContent=(Number(n.dataset.base)+1).toLocaleString('en-US'); $$('.ci-dots i').forEach((d,i)=>d.classList.toggle('on',i<ciUsed)); $('#ciCount').textContent=ciUsed+' of 3 for this visit'; ciSet('ok'); if(!reduce) b.animate([{transform:'scale(1)'},{transform:'scale(1.18)'},{transform:'scale(1)'}],{duration:260}); }, reduce?200:1200); }
   function ciHide(){ clearTimeout(ciTimer); const sc=$('#ciScrim'), sh=$('#ciSheet'); sc.classList.remove('on'); sh.classList.remove('on'); setTimeout(()=>{sc.hidden=true; sh.hidden=true;},280); }
+
+  // desktop demo panel: simulate being at the restaurant
+  $$('#demoPanel [data-loc]').forEach(b=>b.addEventListener('click',()=>{ciHere=b.dataset.loc==='here';$$('#demoPanel [data-loc]').forEach(x=>x.classList.toggle('on',x===b));}));
+  if(ciHere) $$('#demoPanel [data-loc]').forEach(x=>x.classList.toggle('on',x.dataset.loc==='here'));
   const heroOf=img=>'img/hero/'+img.split('/').pop().replace(/\.\w+$/,'')+'.jpg';
   function openDish(name){
     const d=findDish(name); if(!d) return hint('Not in this demo');

@@ -475,3 +475,9 @@ body.mouse #phone,body.mouse #phone *{cursor:none!important}
 
 button,a{-webkit-tap-highlight-color:transparent}button:focus,a:focus{outline:none}button:focus-visible{outline:2px solid #FE2C55;outline-offset:2px}
 .stats-capsule b.big{font-size:18px;line-height:23px;font-weight:700}.name .open{font-style:normal;color:#0BB07B;font-weight:500}
+
+#demoPanel{position:fixed;left:24px;bottom:24px;width:220px;padding:16px;border-radius:16px;background:#1d1d20;color:#fff;font-size:13px;z-index:200;display:none}
+#demoPanel p{font-weight:600;margin-bottom:10px}#demoPanel small{display:block;margin-top:10px;color:rgba(255,255,255,.55);line-height:17px}
+#demoPanel .seg{display:flex;background:#2c2c31;border-radius:10px;padding:3px}#demoPanel .seg button{flex:1;padding:8px 6px;border-radius:8px;font-size:12px;font-weight:600;color:rgba(255,255,255,.7);text-align:center}
+#demoPanel .seg button.on{background:#FE2C55;color:#fff}
+@media (min-width:900px){#demoPanel{display:block}}
