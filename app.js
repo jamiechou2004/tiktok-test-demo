@@ -335,7 +335,7 @@
   scroller.addEventListener('scroll', () => {
     if (S.mode !== 'full' || place.classList.contains('dishes-mode') || Date.now() < spyLock) return;
     let cur='overview'; const y=scroller.scrollTop+60;
-    ['combos','reviews'].forEach(id=>{if($('#sec-'+id).offsetTop<=y) cur=id;});
+    ['combos','reviews','nearby'].forEach(id=>{if($('#sec-'+id).offsetTop<=y) cur=id==='nearby'?'more':id;});
     setTab(cur);
   }, {passive:true});
 
@@ -518,6 +518,7 @@
     },
     openPlace, closePlace,
     collapse() { setMode('half'); },
+    dishes() { navigateTab('dishes'); },
     menu() { openMenu(); }, guide() { pushPage('guide'); }, pop() { popPage(); },
     reviews() { navigateTab('reviews'); }, combos() { navigateTab('combos'); },
     demo() { hint('Not in this demo'); }, restaurant() { hint('Showing the restaurant’s guide'); },
@@ -611,13 +612,13 @@
     syncChrome();
   }
   function navigateTab(tab) {
-    if(tab==='more') return hint('Not in this demo');
+    const section = tab === 'more' ? 'nearby' : tab;
     if(S.screen==='menu') { pageStack.length=0; show('place'); }
     if(S.mode!=='full') setMode('full');
     showPlaceBody(tab==='dishes');
     spyLock=Date.now()+800; setTab(tab);
     if(tab==='dishes') scroller.scrollTop=0;
-    else scroller.scrollTo({top:tab==='overview'?0:$('#sec-'+tab).offsetTop-12,behavior:reduce?'auto':'smooth'});
+    else scroller.scrollTo({top:tab==='overview'?0:$('#sec-'+section).offsetTop-12,behavior:reduce?'auto':'smooth'});
   }
   function pushPage(id) {
     if(S.busy) return;
