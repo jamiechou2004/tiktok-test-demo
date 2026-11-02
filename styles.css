@@ -408,3 +408,11 @@ body.mouse #phone,body.mouse #phone *{cursor:none!important}
 .screen:not(.on){pointer-events:none}.screen.on{pointer-events:auto}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.category-chips button{transition:none}}
 .stats-capsule b{display:flex;align-items:center;gap:3px}.stats-capsule .heart svg{width:18px;height:18px}.nearby-row p svg{width:12px;height:12px;display:inline;vertical-align:-2px}
+
+/* half sheet: header sits on the grey sheet, capsule is its own card (Figma B 140:4787) */
+#place:not(.full) #sec-overview{background:transparent;padding:0;margin-bottom:20px;border-radius:0}
+#place:not(.full) .stats-capsule{margin-top:20px}
+#place:not(.full) #sec-dishes{margin-bottom:20px}
+#place:not(.full) .sheet-scroll{padding-top:8px}
+#place:not(.full) .grabber{margin-bottom:20px}
+.name span .full-only{display:none}#place.full .name span .half-only{display:none}#place.full .name span .full-only{display:inline}
