@@ -343,11 +343,11 @@ body.mouse #phone,body.mouse #phone *{cursor:none!important}
 #place .head-actions{gap:10px}
 #place .head-actions svg{width:20px;height:20px}
 #place.full .head-actions{display:none}
-.stats-capsule{display:flex;margin-top:18px;padding:12px 0;border-radius:16px;background:#fff}
-.stats-capsule button{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;white-space:nowrap}
-.stats-capsule button+button{border-left:1px solid #E6E6E8}
-.stats-capsule small{font-size:11px;color:var(--sub)}
-.stats-capsule b{font-size:15px;font-weight:600}
+.stats-capsule{display:flex;justify-content:center;align-items:center;gap:21px;margin-top:18px;padding:14px 12px;border-radius:18px;background:#fff}
+.stats-capsule button{display:flex;flex-direction:column;align-items:flex-start;gap:4px;flex:none;white-space:nowrap}
+.stats-capsule i{display:block;width:1px;height:30px;background:#E6E6E8;flex:none}
+.stats-capsule small{font-size:11px;line-height:17px;font-weight:500;color:var(--sub)}
+.stats-capsule b{font-size:15px;line-height:23px;font-weight:600}.stats-capsule b.reg{font-weight:400}
 .heart{color:var(--brand)}
 #place .dish-row{margin:0;padding:0;gap:8px;overflow-x:auto}
 #place .dish{width:74px;gap:5px}
@@ -358,14 +358,14 @@ body.mouse #phone,body.mouse #phone *{cursor:none!important}
 #place .rv-text{font-size:14px;line-height:20px}
 #place.full .overview-details{display:block}
 .rating-line,.rating-line>span{display:flex;align-items:center;gap:3px}
-.rating-line{justify-content:space-between;margin:12px 0;padding-bottom:12px;border-bottom:1px solid #F0F0F2;font-size:16px;line-height:21px;white-space:nowrap}.rating-line .rt{gap:4px}.rating-line .rt b{font-weight:600}.rating-line svg{width:18px;height:18px}
+.rating-line{justify-content:space-between;margin:10px 0 12px;padding-bottom:12px;border-bottom:1px solid #E3E3E4;font-size:16px;line-height:21px;white-space:nowrap}.rating-line .rt{gap:4px}.rating-line .rt b{font-weight:600}.rating-line svg{width:18px;height:18px}
 .rating-line button{font-size:13.5px;line-height:18px}.rating-line em{font-weight:500}.rating-line em{font-style:normal;color:#0BB07B}
-.address-actions{display:flex;gap:8px}.address-copy{min-width:0;flex:1}
-.drive-wait{display:flex;align-items:center;gap:8px;color:#2E8B8B;font-size:15px;line-height:20px;font-weight:500;white-space:nowrap}.drive-wait i{display:block;width:1px;height:14px;background:#D6D6D8}.drive-wait .ic svg path{stroke:#2E8B8B}
-.address-copy>p{font-size:13.5px;color:var(--sub);margin-top:4px}
-.street{display:flex;align-items:flex-start;gap:6px;font-size:13.5px;line-height:18px;margin-top:8px;width:100%}.street .txt{flex:1;min-width:0}.street .ic.sm{height:18px;align-items:center}
-.street svg{width:16px;height:16px}.find-it{display:flex;gap:4px;align-items:center;font-size:13px;margin:8px 0 0 22px}
-.address-shortcuts{display:flex;gap:14px;align-items:center;align-self:center;padding:0 0 0 6px}
+.address-actions{display:flex;gap:10px}.address-copy{min-width:0;flex:1;display:flex;flex-direction:column;gap:6px}
+.drive-wait{display:flex;align-items:center;gap:8px;width:100%;color:#2E8B8B;font-size:15px;line-height:20px;font-weight:500;white-space:nowrap}.drive-wait i{display:block;width:1px;height:14px;background:#D6D6D8}.drive-wait .ic{margin-left:auto}.drive-wait .ic svg path{stroke:#2E8B8B}
+.address-copy>p{font-size:13.5px;line-height:18px;color:var(--sub)}
+.street{display:flex;align-items:flex-start;gap:6px;font-size:13.5px;line-height:18px;width:100%}.street .txt{flex:1;min-width:0}.street .ic.sm{height:18px;align-items:center}
+.street svg{width:16px;height:16px}.find-it{display:flex;gap:4px;align-items:center;font-size:13px;line-height:18px;margin:0}
+.address-shortcuts{display:flex;gap:14px;align-items:flex-start;align-self:flex-start;padding-top:2px}
 .address-shortcuts button{display:flex;align-items:center;flex-direction:column;gap:4px;font-size:12px}
 .address-shortcuts .ic{width:40px;height:40px;background:#F1F1F2;border-radius:50%;align-items:center;justify-content:center}
 .address-shortcuts svg{width:20px;height:20px}
@@ -407,4 +407,4 @@ body.mouse #phone,body.mouse #phone *{cursor:none!important}
 .statusbar.dark-text{color:#161823}.statusbar.dark-text .sb-right{filter:invert(1)}
 .screen:not(.on){pointer-events:none}.screen.on{pointer-events:auto}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.category-chips button{transition:none}}
-.stats-capsule b{display:flex;align-items:center;gap:3px}.stats-capsule .heart svg{width:16px;height:16px}.nearby-row p svg{width:12px;height:12px;display:inline;vertical-align:-2px}
+.stats-capsule b{display:flex;align-items:center;gap:3px}.stats-capsule .heart svg{width:18px;height:18px}.nearby-row p svg{width:12px;height:12px;display:inline;vertical-align:-2px}
