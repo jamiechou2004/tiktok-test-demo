@@ -346,7 +346,7 @@ body.mouse #phone,body.mouse #phone *{cursor:none!important}
 .stats-capsule{display:flex;justify-content:center;align-items:center;gap:21px;margin-top:18px;padding:14px 12px;border-radius:18px;background:#fff}
 .stats-capsule button{display:flex;flex-direction:column;align-items:flex-start;gap:4px;flex:none;white-space:nowrap}
 .stats-capsule i{display:block;width:1px;height:30px;background:#E6E6E8;flex:none}
-.stats-capsule small{font-size:11px;line-height:17px;font-weight:500;color:var(--sub)}
+.stats-capsule small{font-size:11px;line-height:17px;font-weight:600;color:var(--sub)}
 .stats-capsule b{font-size:15px;line-height:23px;font-weight:600}.stats-capsule b.reg{font-weight:400}
 .heart{color:var(--brand)}
 #place .dish-row{margin:0;padding:0;gap:8px;overflow-x:auto}
