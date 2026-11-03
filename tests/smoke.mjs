@@ -13,8 +13,7 @@ for(const [name,engine] of [['desktop',chromium],['mobile',webkit]]) {
  for(const [cat,n] of [['Signature',6],['Meat',5],['Veg',3],['Dessert',4],['Snacks',2],['Soup',4]]){await p.locator(`[data-category="${cat}"]`).click();await p.waitForTimeout(600);assert.equal(await p.locator(`#m-${cat} .menu-dish`).count(),n);assert.equal(await p.locator('.category-chips .on').textContent(),cat);await shot('05-menu-'+cat.toLowerCase());}
  await p.locator('#menu [data-act="pop"]').click();await p.waitForTimeout(350);await p.locator('#place.on:not(.full)').waitFor();
  await p.locator('#sheet').dispatchEvent('wheel',{deltaY:90});await p.waitForTimeout(550);await p.locator('#place.full').waitFor();await shot('03-overview');
- await p.locator('#tabs [data-sec="dishes"]').click();await p.locator('#dishesList .menu-dish').first().waitFor();await shot('04-dishes');
- await p.locator('#dishesList .menu-dish-info').first().click();await p.waitForTimeout(400);await p.locator('#dish [data-act="pop"]').click();await p.waitForTimeout(400);await p.locator('#place.dishes-mode').waitFor();
+ await p.locator('#tabs [data-sec="dishes"]').click();await p.waitForTimeout(900);assert.equal(await p.locator('#dishesTab').isHidden(),true);assert.equal(await p.locator('#place.dishes-mode').count(),0);await shot('04-dishes');
  await p.locator('#tabs [data-sec="overview"]').click();await p.locator('[data-act="guide"]').click();await p.waitForTimeout(350);await shot('06-guide');assert.equal(await p.locator('.guide-steps li').count(),3);
  await p.locator('.guide-scroll').evaluate(el=>el.scrollTop=el.scrollHeight);await shot('06-guide-bottom');await p.locator('.guide-scroll').evaluate(el=>el.scrollTop=0);await p.locator('#guide [data-act="pop"]').click();await p.waitForTimeout(350);
  await p.locator('#sheetScroll').evaluate(el=>el.scrollTop=el.scrollHeight);await p.waitForTimeout(900);assert.ok(await p.locator('.nearby-row').count()>=9);await shot('03-nearby');
