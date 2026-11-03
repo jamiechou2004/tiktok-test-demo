@@ -615,10 +615,9 @@
     const section = tab === 'more' ? 'nearby' : tab;
     if(S.screen==='menu') { pageStack.length=0; show('place'); }
     if(S.mode!=='full') setMode('full');
-    showPlaceBody(tab==='dishes');
+    showPlaceBody(false);
     spyLock=Date.now()+800; setTab(tab);
-    if(tab==='dishes') scroller.scrollTop=0;
-    else scroller.scrollTo({top:tab==='overview'?0:$('#sec-'+section).offsetTop-12,behavior:reduce?'auto':'smooth'});
+    scroller.scrollTo({top:tab==='overview'?0:$('#sec-'+section).offsetTop-12,behavior:reduce?'auto':'smooth'});
   }
   function pushPage(id) {
     if(S.busy) return;
